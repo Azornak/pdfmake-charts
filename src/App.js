@@ -3,8 +3,6 @@ import pdfGen from './PDF/pdfgenerator';
 import imgUrl from './images/lambda.png';
 
 function App() {
-
-
   const downloadPDF = async (pdfType) => {
     console.log("Download PDF clicked");
 
@@ -19,7 +17,8 @@ function App() {
     });
     const data = {
       heading: ["test1", "test2", "test3", "test4"],
-      imageTest: dataUrl
+      imageTest: dataUrl,
+      chartData: [{x: 'label', y: 123}, {x: 'label', y: 123}, {x: 'label', y: 123}, {x: 'label', y: 123}]
     };
     pdfGen(pdfType, data);
   }
