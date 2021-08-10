@@ -1,31 +1,38 @@
-import './App.css';
-import pdfGen from './PDF/pdfgenerator';
-import imgUrl from './images/lambda.png';
-
+import pdfGen from "./PDF/pdfgenerator";
+import "./App.css";
+import { getLineChart } from "./PDF/Charts/linechart";
+import {
+  lineChartDummyData,
+  lineChartDummyData2,
+} from "./PDF/Charts/lineChartDummyData";
+import { useEffect } from "react";
 function App() {
-  const downloadPDF = async (pdfType) => {
-    console.log("Download PDF clicked");
+  console.log("Download PDF clicked");
 
-    // Code to load test image. When loading charts we generate the charts with chartjs and use canvas -> toDataURI to get the image
-    // This should be separated into own file, e.g. calling getLinechart(data)
-    let blob = await fetch(imgUrl).then(res =>  res.blob());
-    console.log(blob);
-    let dataUrl = await new Promise(resolve => {
-      let reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.readAsDataURL(blob);
-    });
-    const data = {
+  useEffect(() => {
+    const dataUrl = getLineChart(lineChartDummyData);
+    const dataUrl2 = getLineChart(lineChartDummyData2);
+  }, []);
+
+  const downloadPDF = async (pdfType) => {
+    const dataUrl = getLineChart(lineChartDummyData);
+    const dataUrl2 = getLineChart(lineChartDummyData2);
+    const pdfData = {
       heading: ["test1", "test2", "test3", "test4"],
-      imageTest: dataUrl,
-      chartData: [{x: 'label', y: 123}, {x: 'label', y: 123}, {x: 'label', y: 123}, {x: 'label', y: 123}]
+      imageTest: dataUrl.toBase64Image(),
+      chartData: [
+        { x: "label", y: 123 },
+        { x: "label", y: 123 },
+        { x: "label", y: 123 },
+        { x: "label", y: 123 },
+      ],
     };
-    pdfGen(pdfType, data);
-  }
+    pdfGen(pdfType, pdfData);
+  };
 
   return (
     <div className="App">
-      <button onClick={() => downloadPDF('testpdf')} >Download PDF</button>
+      <button onClick={() => downloadPDF("testpdf")}>Download PDF</button>
     </div>
   );
 }
