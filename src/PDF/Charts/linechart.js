@@ -77,6 +77,17 @@ function generateLabels(nlabels) {
 }
 
 /**
+ *
+ * @returns random rgba color
+ */
+function getRandomRgbaColor(opacity = 0.4) {
+  var r = Math.floor(Math.random() * 200);
+  var g = Math.floor(Math.random() * 200);
+  var b = Math.floor(Math.random() * 200);
+  return `rgba(${r},${g},${b},${opacity})`;
+}
+
+/**
  * Sets some default settings on each dataset to be displayed
  * @returns mutated data object
  */
@@ -84,6 +95,7 @@ function setDatasetSettings(data) {
   return data.map((set) => {
     set.fill = CHART_FILL_LINES;
     set.tension = CHART_TENSION;
+    set.borderColor = getRandomRgbaColor();
     return set;
   });
 }
