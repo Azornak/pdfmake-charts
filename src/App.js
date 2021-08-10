@@ -6,12 +6,15 @@ import {
   lineChartDummyData2,
 } from "./PDF/Charts/lineChartDummyData";
 import { useEffect } from "react";
+import { getBarChart } from "./PDF/Charts/barchart";
+import { barChartDummyData } from "./PDF/Charts/barChartDummyData";
 function App() {
   console.log("Download PDF clicked");
 
   useEffect(() => {
     const dataUrl = getLineChart(lineChartDummyData);
     const dataUrl2 = getLineChart(lineChartDummyData2);
+    const dataUrl3 = getBarChart(barChartDummyData);
   }, []);
 
   const downloadPDF = async (pdfType) => {
