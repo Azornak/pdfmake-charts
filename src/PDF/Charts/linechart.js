@@ -1,25 +1,13 @@
 import Chart from "chart.js/auto";
 import annotationPlugin from "chartjs-plugin-annotation";
+import { generateCanvas } from "./helpers";
+
 Chart.register(annotationPlugin);
 
 // How smooth the lines should be> cubic interpolation
 const CHART_TENSION = 0.4;
 // If it should color the area under the lines
 const CHART_FILL_LINES = false;
-
-/**
- * Generates a canvas positioned way outside the screen with a div wrapper
- * around it .
- * @returns returns a canvas div wrapper element, and a a canvas element
- */
-function generateCanvas() {
-  const canvas = document.createElement("canvas");
-  // canvas.style.position = "absolute";
-  // canvas.style.top = "-3000px";
-
-  document.body.appendChild(canvas);
-  return canvas;
-}
 
 /**
  * Line chart format
