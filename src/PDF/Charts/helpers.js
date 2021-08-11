@@ -11,3 +11,19 @@ export function generateCanvas() {
   document.body.appendChild(canvas);
   return canvas;
 }
+
+/**
+ * Returns a default chartjs axis title config.
+ * Titles are positioned at the end with black color.
+ *
+ * @param {string} title
+ * @returns
+ */
+export function getTitleConfig(title) {
+  return {
+    display: true,
+    color: "black",
+    text: title,
+    align: "end",
+  };
+}

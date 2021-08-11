@@ -1,5 +1,5 @@
 import Chart from "chart.js/auto";
-import { generateCanvas } from "./helpers";
+import { generateCanvas, getTitleConfig } from "./helpers";
 
 /**
  * Generates a bar chart and returns the Chartjs instance
@@ -33,21 +33,26 @@ function createChart(canvasRef, chartData) {
   const chart = new Chart(canvasRef, {
     type: "bar",
     data: {
-      labels: ["a", "2"],
-      datasets: chartData.datasets,
+      labels: chartData.labels,
+      datasets: datasets,
     },
     options: {
       scales: {
-        y: { labels: "e", title: "test", display: true, position: "top" },
+        x: {
+          title: getTitleConfig(chartData.xAxisTitle),
+        },
+        y: {
+          title: getTitleConfig(chartData.yAxisTitle),
+        },
       },
+
+      /**
+       * Animations has to be disabled to be able to get the chart base64 image.
+       * Or else we have to use promises/callbacks for the animation to finish before
+       * we are able to aquire the image e.g it will be blank before.
+       */
+      animation: false,
     },
-    /**
-     * Animations has to be disabled to be able to get the chart base64 image.
-     * Or else we have to use promises/callbacks for the animation to finish before
-     * we are able to aquire the image e.g it will be blank before.
-     */
-    animation: false,
   });
-  console.log(chart);
   return chart;
 }
