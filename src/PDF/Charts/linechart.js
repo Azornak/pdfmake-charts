@@ -65,6 +65,8 @@ function generateLabels(nlabels) {
 }
 
 /**
+ * Creates and returns a string representation of a
+ * rgba value. An optional opacity can be provided, defauls to 0.4
  *
  * @returns random rgba color
  */
