@@ -5,6 +5,8 @@ export const lineChartDummyData = {
     },
     { value: 70 },
   ],
+  xAxisTitle: "Time",
+  yAxisTitle: "Temperature",
   datasets: [
     {
       label: "temperatures sensor 1",
@@ -36,16 +38,18 @@ export const lineChartDummyData2 = {
     },
     { value: 5 },
   ],
+  xAxisTitle: "Time",
+  yAxisTitle: "Production Speed / [Fish/min]",
   datasets: [
     {
-      label: "temperatures sensor 1",
+      label: "Process 1",
       data: [
         1, 2, 3, 3, 6, 7, 8, 2, 6, 6, 7, 7, 7, 7, 7, 8, 8, 9, 1, 2, 3, 4, 3, 3,
         3, 3, 3, 3, 3, 2,
       ],
     },
     {
-      label: "temperatures sensor 2",
+      label: "Process 2",
       data: [
         5, 3, 4, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 6, 6, 6, 6, 6, 6, 4, 4, 2, 1,
         7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,

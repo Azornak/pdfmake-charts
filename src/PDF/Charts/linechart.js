@@ -1,6 +1,6 @@
 import Chart from "chart.js/auto";
 import annotationPlugin from "chartjs-plugin-annotation";
-import { generateCanvas } from "./helpers";
+import { generateCanvas, getTitleConfig } from "./helpers";
 
 Chart.register(annotationPlugin);
 
@@ -129,10 +129,8 @@ function createChart(canvas, chartData) {
         },
       },
       plugins: {
-        legend: {
-          position: "bottom",
-        },
         annotation: {
+          // This comes from a plugin: https://www.chartjs.org/chartjs-plugin-annotation
           annotations: createLimits(chartData.limits),
         },
         title: {
@@ -146,19 +144,10 @@ function createChart(canvas, chartData) {
         x: {
           labels: [],
           display: true,
-          title: {
-            text: "test",
-            display: true,
-          },
+          title: getTitleConfig(chartData.xAxisTitle),
         },
         y: {
-          stack: true,
-          display: true,
-          position: "top",
-          title: {
-            display: true,
-            text: "Value",
-          },
+          title: getTitleConfig(chartData.yAxisTitle),
         },
       },
       annotation: {},
