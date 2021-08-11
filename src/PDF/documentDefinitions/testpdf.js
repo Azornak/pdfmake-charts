@@ -34,18 +34,92 @@ function createSeperatorLine(height, percentWidth = 100) {
   };
 }
 
+/**
+ * Creates a chapter seperator component definition
+ * It contains a text element and a seperator line.
+ * @param {string} chapterTitle the title of the chapter
+ * @returns chapter seperator definition object
+ */
+function createChapterSeperator(chapterTitle) {
+  return {
+    stack: [
+      createHeader(chapterTitle),
+      createSeperatorLine(CHAPTER_LINE_HEIGHT, 100),
+    ],
+  };
+}
+
+/**
+ * Creates a subchapter seperator component definition
+ * It contains a text element and a seperator line.
+ * @param {string} subChapterTitle the title of the subchapter
+ * @returns subchapter seperator definition object
+ */
+function createSubChapterSeperator(subChapterTitle, width = 100) {
+  return {
+    stack: [
+      createSubHeader(subChapterTitle),
+      createSeperatorLine(SUB_CHAPTER_LINE_HEIGHT, 100),
+    ],
+  };
+}
+
+/**
+ * Creates a datapoint seperator component definition
+ * It contains a text element and a seperator line.
+ * @param {string} dataPointTitle the title of the data point
+ * @returns datapoint seperator definition object
+ */
+function createDataPointSeperator(dataPointTitle, width = 100) {
+  return {
+    stack: [
+      createDataPointHeader(dataPointTitle),
+      createSeperatorLine(DATA_POINT_LINE_HEIGHT, width),
+    ],
+  };
+}
+
+/**
+ * Creates a datapoint definition object with a title , seperator line and value field bellow.
+ * @param {object} dataPointConfig datapoint object with title and
+ * @returns returns datapoint definition object
+ */
+function createDataPointComponent(dataPointConfig) {
+  return {
+    stack: [
+      createDataPointHeader("title"),
+      createSeperatorLine(DATA_POINT_LINE_HEIGHT, 30),
+      { text: "subtitle", margin: [1, 3, 0, 3] },
+    ],
+  };
+}
+
 var docDefinition = (data) => {
-  console.log("Inserting data to PDF", data);
+  console.dir(data);
   return {
     pageSize: "A4",
     pageMargins: [20, 20, 20, 20],
     styles: {
       header: {
-        fontSize: 14,
         bold: true,
+      },
+      subHeader: {
+        bold: false,
+      },
+      dataPointHeader: {
+        bold: false,
       },
     },
     content: [
+      { text: "-------- COMPONENTS" },
+      createSeperatorLine(CHAPTER_LINE_HEIGHT, 100),
+      createSeperatorLine(SUB_CHAPTER_LINE_HEIGHT, 100),
+      createSeperatorLine(DATA_POINT_LINE_HEIGHT, 100),
+      createChapterSeperator("01-Main section"),
+      createSubChapterSeperator("01.01-Subsection"),
+      createDataPointSeperator("A datapoint seperator"),
+      createDataPointComponent({}),
+      { text: "-------- END OF COMPONENTS", margin: [0, 0, 0, 30] },
       {
         text: "01-processing site",
         style: "header",
