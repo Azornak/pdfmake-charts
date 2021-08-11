@@ -1,15 +1,16 @@
+import { checkBoxCheckedSVG, checkBoxSVG } from "./checkbox";
+
 const DOCUMENT_WIDTH = 555;
 const CHAPTER_LINE_HEIGHT = 5;
 const SUB_CHAPTER_LINE_HEIGHT = 3;
 const DATA_POINT_LINE_HEIGHT = 0.5;
-const SEPERATOR_LINE_COLOR = "rgb(85, 210, 233)";
+const SEPERATOR_LINE_COLOR = "#55D2E9";
 
 const HISTOGRAM_HELPER_TABLE_HEADER_COLOR = "#309CAA";
 const HISTOGRAM_HELPER_TABLE_HEADER_TEXT_COLOR = "#FFFFFF";
 const HISTOGRAM_HELPER_TABLE_N1_ROW_COLOR = "#E9EBF5";
 const HISTOGRAM_HELPER_TABLE_N2_ROW_COLOR = "#CFD5EA";
 const HISTOGRAM_HELPER_TABLE_BORDER_COLOR = "#FFF";
-
 const TITLE_MARGINS = [1, 15, 0, 3];
 
 function createHeader(text) {
@@ -203,6 +204,42 @@ function createGraphHelperTable(tableValues) {
   };
 }
 
+/**
+ * Creats a table with checkboxes and label text.
+ * If a value is checked a checked checkbox is displayed, else an empty checkbox.
+ *
+ * Format:
+ * [{checked: boolean, label: string }]
+ * @param {object} checkboxConfig checkboxes to create
+ * @returns table of checkboxes definition object
+ */
+function createCheckboxes(checkboxConfig) {
+  const checkboxes = [];
+
+  for (const checkItem of checkboxConfig) {
+    checkboxes.push(
+      { svg: checkItem.checked ? checkBoxCheckedSVG : checkBoxSVG },
+      { text: checkItem.label }
+    );
+  }
+
+  return {
+    layout: "noBorders",
+    table: {
+      headerRows: 0,
+      body: [checkboxes],
+    },
+  };
+}
+
+function createCheckboxDataPoint(checkboxDataPointConfig) {
+  const { title, checkboxes } = checkboxDataPointConfig;
+
+  return {
+    stack: [createDataPointSeperator(title), createCheckboxes(checkboxes)],
+  };
+}
+
 var docDefinition = (data) => {
   console.dir(data);
   return {
@@ -221,6 +258,11 @@ var docDefinition = (data) => {
     },
     content: [
       { text: "-------- COMPONENTS" },
+      createCheckboxes([
+        { checked: true, label: "yes" },
+        { checked: false, label: "no" },
+        { checked: true, label: "absolutely" },
+      ]),
       createSeperatorLine(CHAPTER_LINE_HEIGHT, 100),
       createSeperatorLine(SUB_CHAPTER_LINE_HEIGHT, 100),
       createSeperatorLine(DATA_POINT_LINE_HEIGHT, 100),
@@ -266,6 +308,14 @@ var docDefinition = (data) => {
       createImageComponent({
         title: "A process overview",
         image: data.lineChart1,
+      }),
+      createCheckboxDataPoint({
+        title: "Blood water delivered",
+        checkboxes: [
+          { checked: true, label: "yes" },
+          { checked: false, label: "no" },
+          { checked: true, label: "absolutely" },
+        ],
       }),
     ],
   };
