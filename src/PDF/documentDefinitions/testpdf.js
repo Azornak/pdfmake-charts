@@ -2,14 +2,23 @@ const DOCUMENT_WIDTH = 555;
 const CHAPTER_LINE_HEIGHT = 5;
 const SUB_CHAPTER_LINE_HEIGHT = 3;
 const DATA_POINT_LINE_HEIGHT = 1;
+const SEPERATOR_LINE_COLOR = "rgb(85, 210, 233)";
 
+/**
+ * Creates a SVG line component with provided height and width of document.
+ * The default width is 100% of the document.
+ * Values below 1 or above 100 will be converted to 100%
+ * @param {number} height height of the line
+ * @param {number} percentWidth percentage of document width 1-100
+ * @returns returns an svg line component definition
+ */
 function createSeperatorLine(height, percentWidth = 100) {
   if (percentWidth > 100 || percentWidth < 1) percentWidth = 100;
   const width = (percentWidth / 100) * DOCUMENT_WIDTH;
   return {
     svg: `<svg width="${width}" height="${
-      height + 5
-    }"> <rect width="100%" height="${height}" style="fill:rgb(85, 210, 233);" /> </svg>`,
+      height + 10
+    }"> <rect y="5" width="100%" height="${height}" style="fill:${SEPERATOR_LINE_COLOR};" /> </svg>`,
   };
 }
 
