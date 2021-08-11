@@ -4,6 +4,18 @@ const SUB_CHAPTER_LINE_HEIGHT = 3;
 const DATA_POINT_LINE_HEIGHT = 1;
 const SEPERATOR_LINE_COLOR = "rgb(85, 210, 233)";
 
+const TITLE_MARGINS = [1, 15, 0, 3];
+
+function createHeader(text) {
+  return { text, style: "header", margin: TITLE_MARGINS };
+}
+function createSubHeader(text) {
+  return { text, style: "subHeader", margin: TITLE_MARGINS };
+}
+function createDataPointHeader(text) {
+  return { text, style: "dataPointHeader", margin: TITLE_MARGINS };
+}
+
 /**
  * Creates a SVG line component with provided height and width of document.
  * The default width is 100% of the document.
