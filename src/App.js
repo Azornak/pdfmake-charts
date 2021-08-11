@@ -13,13 +13,15 @@ function App() {
   const iframeRef = useRef(null);
   useEffect(() => {
     const downloadPDF = async (pdfType) => {
-      const dataUrl = getLineChart(lineChartDummyData);
-      const dataUrl2 = getLineChart(lineChartDummyData2);
-      const dataUrl3 = getBarChart(barChartDummyData);
+      const line1 = getLineChart(lineChartDummyData);
+      const line2 = getLineChart(lineChartDummyData2);
+      const bar1 = getBarChart(barChartDummyData);
 
       const pdfData = {
         heading: ["test1", "test3", "test3", "test4"],
-        imageTest: dataUrl.toBase64Image(),
+        barChart1: bar1.toBase64Image(),
+        lineChart: line1.toBase64Image(),
+        lineChart2: line2.toBase64Image(),
         chartData: [
           { x: "label", y: 123 },
           { x: "label", y: 123 },
@@ -34,7 +36,11 @@ function App() {
 
   return (
     <div className="App">
-      <iframe ref={iframeRef} style={{ width: "100vw", height: "100vh" }} />
+      <iframe
+        title="pdf"
+        ref={iframeRef}
+        style={{ width: "100vw", height: "100vh" }}
+      />
     </div>
   );
 }

@@ -146,7 +146,6 @@ var docDefinition = (data) => {
           ],
         },
       },
-      { image: data.imageTest, width: 500 },
     ],
   };
 };
