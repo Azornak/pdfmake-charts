@@ -20,7 +20,7 @@ function App() {
       const pdfData = {
         heading: ["test1", "test3", "test3", "test4"],
         barChart1: bar1.toBase64Image(),
-        lineChart: line1.toBase64Image(),
+        lineChart1: line1.toBase64Image(),
         lineChart2: line2.toBase64Image(),
         chartData: [
           { x: "label", y: 123 },

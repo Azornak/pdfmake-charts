@@ -21,6 +21,13 @@ function createSubHeader(text) {
 function createDataPointHeader(text) {
   return { text, style: "dataPointHeader", margin: TITLE_MARGINS };
 }
+/**
+ * Breaks the page before this definition
+ * @returns text definition object with break before
+ */
+function breakPage() {
+  return { text: "", pageBreak: "before" };
+}
 
 /**
  * Creates a SVG line component with provided height and width of document.
@@ -125,6 +132,20 @@ function createHistogramGraphComponents(graphConfig) {
   };
 
   return [createDataPointSeperator(title), contentTable];
+}
+
+/**
+ * Creates a image definition object.
+ * It contains a title and an image
+ * @param {object} imageConfig
+ * @returns image definition object
+ */
+function createImageComponent(imageConfig) {
+  const { image, title } = imageConfig;
+
+  return {
+    stack: [createDataPointSeperator(title), { image, width: DOCUMENT_WIDTH }],
+  };
 }
 
 /**
@@ -241,25 +262,11 @@ var docDefinition = (data) => {
           ],
         },
       }),
-      {
-        layout: "lightHorizontalLines",
-
-        table: {
-          headerRows: 1,
-          widths: ["*", "auto", 100, "*"],
-
-          body: [
-            [
-              data.heading[0],
-              data.heading[1],
-              data.heading[2],
-              data.heading[3],
-            ],
-            ["Value 1", "Value 1", "Value 3", "Value 4"],
-            [{ text: "Bold value", bold: true }, "Val 2", "Val 3", "Val 4"],
-          ],
-        },
-      },
+      breakPage(),
+      createImageComponent({
+        title: "A process overview",
+        image: data.lineChart1,
+      }),
     ],
   };
 };
