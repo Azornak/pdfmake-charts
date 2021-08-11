@@ -5,12 +5,18 @@ const CHAPTER_LINE_HEIGHT = 5;
 const SUB_CHAPTER_LINE_HEIGHT = 3;
 const DATA_POINT_LINE_HEIGHT = 0.5;
 const SEPERATOR_LINE_COLOR = "#55D2E9";
-
+//
 const HISTOGRAM_HELPER_TABLE_HEADER_COLOR = "#309CAA";
 const HISTOGRAM_HELPER_TABLE_HEADER_TEXT_COLOR = "#FFFFFF";
 const HISTOGRAM_HELPER_TABLE_N1_ROW_COLOR = "#E9EBF5";
 const HISTOGRAM_HELPER_TABLE_N2_ROW_COLOR = "#CFD5EA";
 const HISTOGRAM_HELPER_TABLE_BORDER_COLOR = "#FFF";
+//
+const DATA_TABLE_HEADER_COLOR = "#7F7F7F";
+const DATA_TABLE_HEADER_TEXT_COLOR = "#FFFFFF";
+const DATA_TABLE_ROW_COLOR = "#FAFAFA";
+const DATA_TABLE_BORDER_COLOR = "#FFF";
+//
 const TITLE_MARGINS = [1, 15, 0, 3];
 
 function createHeader(text) {
@@ -244,6 +250,100 @@ function createCheckboxDataPoint(checkboxDataPointConfig) {
   return createDataPointComponent({ title, component });
 }
 
+function createCageTable() {
+  return {
+    layout: {
+      fillColor: function (rowIndex, node, columnIndex) {
+        if (rowIndex < 2) return DATA_TABLE_HEADER_COLOR;
+        return DATA_TABLE_ROW_COLOR;
+      },
+      hLineWidth: function (i, node) {
+        return i === 1 ? 2 : 0;
+      },
+      vLineWidth: function (i, node) {
+        return 2;
+      },
+      hLineColor: function (i, node) {
+        return HISTOGRAM_HELPER_TABLE_BORDER_COLOR;
+      },
+      vLineColor: function (i, node) {
+        return HISTOGRAM_HELPER_TABLE_BORDER_COLOR;
+      },
+    }, // optional
+    table: {
+      headerRows: 2,
+      // keepWithHeaderRows: 1,
+      body: [
+        [
+          {
+            text: "",
+            style: "tableHeader",
+            colSpan: 4,
+            alignment: "center",
+            color: DATA_TABLE_HEADER_TEXT_COLOR,
+          },
+          {},
+          {},
+          {},
+          {
+            text: "System estimated",
+            style: "tableHeader",
+            colSpan: 3,
+            alignment: "center",
+            color: DATA_TABLE_HEADER_TEXT_COLOR,
+          },
+          {},
+          {},
+        ],
+        [
+          {
+            text: "From cage [nr]",
+            style: "tableHeader",
+            alignment: "center",
+            color: DATA_TABLE_HEADER_TEXT_COLOR,
+          },
+          {
+            text: "To RSW Tank [nr]",
+            style: "tableHeader",
+            alignment: "center",
+            color: DATA_TABLE_HEADER_TEXT_COLOR,
+          },
+          {
+            text: "Total Time [HH:MM:SS]",
+            style: "tableHeader",
+            alignment: "center",
+            color: DATA_TABLE_HEADER_TEXT_COLOR,
+          },
+          {
+            text: "Waiting [HH:MM:SS]",
+            style: "tableHeader",
+            alignment: "center",
+            color: DATA_TABLE_HEADER_TEXT_COLOR,
+          },
+          {
+            text: "Biomass [kg]",
+            style: "tableHeader",
+            alignment: "center",
+            color: DATA_TABLE_HEADER_TEXT_COLOR,
+          },
+          {
+            text: "Quantum [fish]",
+            style: "tableHeader",
+            alignment: "center",
+            color: DATA_TABLE_HEADER_TEXT_COLOR,
+          },
+          {
+            text: "Avg. Biomass [kg/fisk]",
+            style: "tableHeader",
+            alignment: "center",
+            color: DATA_TABLE_HEADER_TEXT_COLOR,
+          },
+        ],
+      ],
+    },
+  };
+}
+
 var docDefinition = (data) => {
   console.dir(data);
   return {
@@ -274,6 +374,7 @@ var docDefinition = (data) => {
       createSubChapterSeperator("01.01-Subsection"),
       createDataPointSeperator("A datapoint seperator"),
       createDataPointTextComponent({ title: "Process", content: "100kg" }),
+      createCageTable(),
       { text: "-------- END OF COMPONENTS", margin: [0, 0, 0, 30] },
       createChapterSeperator("01-Processing site"),
       {
