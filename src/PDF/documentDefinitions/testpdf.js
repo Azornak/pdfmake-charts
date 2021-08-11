@@ -1,8 +1,14 @@
 const DOCUMENT_WIDTH = 555;
 const CHAPTER_LINE_HEIGHT = 5;
 const SUB_CHAPTER_LINE_HEIGHT = 3;
-const DATA_POINT_LINE_HEIGHT = 1;
+const DATA_POINT_LINE_HEIGHT = 0.5;
 const SEPERATOR_LINE_COLOR = "rgb(85, 210, 233)";
+
+const HISTOGRAM_HELPER_TABLE_HEADER_COLOR = "#309CAA";
+const HISTOGRAM_HELPER_TABLE_HEADER_TEXT_COLOR = "#FFFFFF";
+const HISTOGRAM_HELPER_TABLE_N1_ROW_COLOR = "#E9EBF5";
+const HISTOGRAM_HELPER_TABLE_N2_ROW_COLOR = "#CFD5EA";
+const HISTOGRAM_HELPER_TABLE_BORDER_COLOR = "#FFF";
 
 const TITLE_MARGINS = [1, 15, 0, 3];
 
@@ -94,6 +100,88 @@ function createDataPointComponent(dataPointConfig) {
   };
 }
 
+/**
+ * Creates a histogram graph definition object.
+ * It contains a title, a graph image and a helper table for the graph.
+ * @param {object} graphConfig
+ * @returns histogram definition object
+ */
+function createHistogramGraphComponents(graphConfig) {
+  const { graph, title, table } = graphConfig;
+
+  const contentTable = {
+    layout: "noBorders",
+    table: {
+      headerRows: 1,
+      widths: ["60%", "*", "25%"],
+      body: [
+        [
+          { image: graph, width: DOCUMENT_WIDTH * 0.6 },
+          {},
+          createGraphHelperTable(table),
+        ],
+      ],
+    },
+  };
+
+  return [createDataPointSeperator(title), contentTable];
+}
+
+/**
+ * Creates a grapgh helper table to visualize value/label for
+ * a histogram graph.
+ * The provided object is in format 
+ * {
+ *  titles: [string, string,...]
+    data: [ [string,string, ...], [string, string,...]]
+ * }
+ * @param {object} tableValues object of table data
+ * @returns returns a table definition object
+ */
+function createGraphHelperTable(tableValues) {
+  const { titles, data } = tableValues;
+  console.log(data);
+  const headers = titles.map((title) => {
+    return {
+      border: [true, false, true, false],
+      fillColor: HISTOGRAM_HELPER_TABLE_HEADER_COLOR,
+      text: {
+        text: title,
+        color: HISTOGRAM_HELPER_TABLE_HEADER_TEXT_COLOR,
+        alignment: "center",
+      },
+    };
+  });
+  return {
+    layout: {
+      fillColor: function (rowIndex, node, columnIndex) {
+        return rowIndex % 2 === 0
+          ? HISTOGRAM_HELPER_TABLE_N1_ROW_COLOR
+          : HISTOGRAM_HELPER_TABLE_N2_ROW_COLOR;
+      },
+      hLineWidth: function (i, node) {
+        return i === 1 ? 2 : 0;
+      },
+      vLineWidth: function (i, node) {
+        return 2;
+      },
+      hLineColor: function (i, node) {
+        return HISTOGRAM_HELPER_TABLE_BORDER_COLOR;
+      },
+      vLineColor: function (i, node) {
+        return HISTOGRAM_HELPER_TABLE_BORDER_COLOR;
+      },
+    },
+
+    table: {
+      headerRows: 1,
+      widths: ["*", "*"],
+      alignment: "center",
+      body: [headers, ...data],
+    },
+  };
+}
+
 var docDefinition = (data) => {
   console.dir(data);
   return {
@@ -120,17 +208,43 @@ var docDefinition = (data) => {
       createDataPointSeperator("A datapoint seperator"),
       createDataPointComponent({}),
       { text: "-------- END OF COMPONENTS", margin: [0, 0, 0, 30] },
+      createChapterSeperator("01-Processing site"),
       {
-        text: "01-processing site",
-        style: "header",
+        layout: "noBorders",
+        table: {
+          headerRows: 1,
+          widths: ["*", "*", "*"],
+
+          body: [
+            [
+              createDataPointComponent({}),
+              createDataPointComponent({}),
+              createDataPointComponent({}),
+            ],
+            [
+              createDataPointComponent({}),
+              createDataPointComponent({}),
+              createDataPointComponent({}),
+            ],
+          ],
+        },
       },
-      createSeperatorLine(CHAPTER_LINE_HEIGHT, 100),
+      ...createHistogramGraphComponents({
+        title: "RSW - temperatures",
+        graph: data.barChart1,
+        table: {
+          titles: ["size", "qty"],
+          data: [
+            ["1", "2"],
+            ["3", "4"],
+            ["3", "2"],
+          ],
+        },
+      }),
       {
-        layout: "lightHorizontalLines", // optional
+        layout: "lightHorizontalLines",
 
         table: {
-          // headers are automatically repeated if the table spans over multiple pages
-          // you can declare how many rows should be treated as headers
           headerRows: 1,
           widths: ["*", "auto", 100, "*"],
 
