@@ -10,8 +10,26 @@ export function getBarChart(chartData) {
   return createChart(canvasRef, chartData);
 }
 
+/**
+ * Set background color, border color, border width on
+ * each datasets for altering the visuals of bars.
+ * This returns a new array of datasets and do not mutate old objects.
+ * @param {object} datasets
+ * @returns
+ */
+function setBarStyle(datasets) {
+  return datasets.map((dataset) => {
+    return {
+      ...dataset,
+      backgroundColor: ["rgb(48, 156, 170)"],
+      borderColor: ["rgb(48, 156, 170)"],
+      borderWidth: 1,
+    };
+  });
+}
+
 function createChart(canvasRef, chartData) {
-  console.log(chartData.datasets);
+  const datasets = setBarStyle(chartData.datasets);
   const chart = new Chart(canvasRef, {
     type: "bar",
     data: {
