@@ -94,18 +94,24 @@ function createDataPointSeperator(dataPointTitle, width = 100) {
 }
 
 /**
- * Creates a datapoint definition object with a title , seperator line and value field bellow.
+ * Creates a datapoint definition object with a title , seperator line and component definition bellow (e.g text, image etc).
  * @param {object} dataPointConfig datapoint object with title and
  * @returns returns datapoint definition object
  */
 function createDataPointComponent(dataPointConfig) {
+  const { title, component } = dataPointConfig;
   return {
     stack: [
-      createDataPointHeader("title"),
+      createDataPointHeader(title),
       createSeperatorLine(DATA_POINT_LINE_HEIGHT, 30),
-      { text: "subtitle", margin: [1, 3, 0, 3] },
+      component,
     ],
   };
+}
+
+function createDataPointTextComponent(textPointConfig) {
+  const component = { text: textPointConfig.content, margin: [1, 3, 0, 3] };
+  return createDataPointComponent({ title: textPointConfig.title, component });
 }
 
 /**
@@ -213,7 +219,7 @@ function createGraphHelperTable(tableValues) {
  * @param {object} checkboxConfig checkboxes to create
  * @returns table of checkboxes definition object
  */
-function createCheckboxes(checkboxConfig) {
+function createCheckboxesComponent(checkboxConfig) {
   const checkboxes = [];
 
   for (const checkItem of checkboxConfig) {
@@ -234,10 +240,8 @@ function createCheckboxes(checkboxConfig) {
 
 function createCheckboxDataPoint(checkboxDataPointConfig) {
   const { title, checkboxes } = checkboxDataPointConfig;
-
-  return {
-    stack: [createDataPointSeperator(title), createCheckboxes(checkboxes)],
-  };
+  const component = createCheckboxesComponent(checkboxes);
+  return createDataPointComponent({ title, component });
 }
 
 var docDefinition = (data) => {
@@ -258,7 +262,7 @@ var docDefinition = (data) => {
     },
     content: [
       { text: "-------- COMPONENTS" },
-      createCheckboxes([
+      createCheckboxesComponent([
         { checked: true, label: "yes" },
         { checked: false, label: "no" },
         { checked: true, label: "absolutely" },
@@ -269,7 +273,7 @@ var docDefinition = (data) => {
       createChapterSeperator("01-Main section"),
       createSubChapterSeperator("01.01-Subsection"),
       createDataPointSeperator("A datapoint seperator"),
-      createDataPointComponent({}),
+      createDataPointTextComponent({ title: "Process", content: "100kg" }),
       { text: "-------- END OF COMPONENTS", margin: [0, 0, 0, 30] },
       createChapterSeperator("01-Processing site"),
       {
@@ -280,14 +284,32 @@ var docDefinition = (data) => {
 
           body: [
             [
-              createDataPointComponent({}),
-              createDataPointComponent({}),
-              createDataPointComponent({}),
+              createDataPointTextComponent({
+                title: "Process",
+                content: "100kg",
+              }),
+              createDataPointTextComponent({
+                title: "Process",
+                content: "100kg",
+              }),
+              createDataPointTextComponent({
+                title: "Process",
+                content: "100kg",
+              }),
             ],
             [
-              createDataPointComponent({}),
-              createDataPointComponent({}),
-              createDataPointComponent({}),
+              createDataPointTextComponent({
+                title: "Process",
+                content: "100kg",
+              }),
+              createDataPointTextComponent({
+                title: "Process",
+                content: "100kg",
+              }),
+              createDataPointTextComponent({
+                title: "Process",
+                content: "100kg",
+              }),
             ],
           ],
         },
@@ -314,7 +336,6 @@ var docDefinition = (data) => {
         checkboxes: [
           { checked: true, label: "yes" },
           { checked: false, label: "no" },
-          { checked: true, label: "absolutely" },
         ],
       }),
     ],
