@@ -18,6 +18,7 @@ const DATA_TABLE_ROW_COLOR = "#F2F2F2";
 const DATA_TABLE_BORDER_COLOR = "#FFF";
 //
 const TITLE_MARGINS = [1, 15, 0, 3];
+const TABLE_MARGINS = [0, 15, 0, 0];
 
 function createHeader(text) {
   return { text, style: "header", margin: TITLE_MARGINS };
@@ -264,6 +265,44 @@ function createTableBodyText(text, alignment = "left") {
     text: text,
     alignment,
     margin: [2, 3, 2, 3],
+  };
+}
+
+/**
+ * Creates a singl column comment table with a fixed header row with title:Comment, and
+ * a single row with the provided comment text.
+ * Returns the definiton object.
+ * @param {string} commentText comment text to display
+ * @returns comment table defintion object
+ */
+function createCommentBlock(commentText) {
+  return {
+    layout: {
+      fillColor: function (rowIndex, node, columnIndex) {
+        if (rowIndex < 1) return DATA_TABLE_HEADER_COLOR;
+        return DATA_TABLE_ROW_COLOR;
+      },
+      hLineWidth: function (i, node) {
+        return i === 1 ? 2 : 0;
+      },
+      vLineWidth: function (i, node) {
+        return 2;
+      },
+      hLineColor: function (i, node) {
+        return DATA_TABLE_BORDER_COLOR;
+      },
+      vLineColor: function (i, node) {
+        return DATA_TABLE_BORDER_COLOR;
+      },
+    },
+    margin: TABLE_MARGINS,
+    table: {
+      headerRows: 1,
+      body: [
+        [createTableHeaderText("Comment")],
+        [createTableBodyText(commentText)],
+      ],
+    },
   };
 }
 
