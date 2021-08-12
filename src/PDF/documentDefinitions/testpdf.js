@@ -14,7 +14,7 @@ const HISTOGRAM_HELPER_TABLE_BORDER_COLOR = "#FFF";
 //
 const DATA_TABLE_HEADER_COLOR = "#7F7F7F";
 const DATA_TABLE_HEADER_TEXT_COLOR = "#FFFFFF";
-const DATA_TABLE_ROW_COLOR = "#FAFAFA";
+const DATA_TABLE_ROW_COLOR = "#F2F2F2";
 const DATA_TABLE_BORDER_COLOR = "#FFF";
 //
 const TITLE_MARGINS = [1, 15, 0, 3];
@@ -250,7 +250,35 @@ function createCheckboxDataPoint(checkboxDataPointConfig) {
   return createDataPointComponent({ title, component });
 }
 
-function createCageTable() {
+function createTableHeaderText(text) {
+  return {
+    text,
+    style: "tableHeader",
+    alignment: "center",
+    color: DATA_TABLE_HEADER_TEXT_COLOR,
+    margin: [2, 3, 2, 3],
+  };
+}
+function createTableBodyText(text) {
+  return {
+    text: text,
+    alignment: "center",
+    margin: [2, 3, 2, 3],
+  };
+}
+
+function createCageTable(tableData = []) {
+  const tableDataComponents = [];
+  if (tableData.length === 0) {
+    return { text: "No data for cage table" };
+  } else {
+    for (const row of tableData) {
+      const newRow = row.map((column) => {
+        return createTableBodyText(column);
+      });
+      tableDataComponents.push(newRow);
+    }
+  }
   return {
     layout: {
       fillColor: function (rowIndex, node, columnIndex) {
@@ -264,81 +292,82 @@ function createCageTable() {
         return 2;
       },
       hLineColor: function (i, node) {
-        return HISTOGRAM_HELPER_TABLE_BORDER_COLOR;
+        return DATA_TABLE_BORDER_COLOR;
       },
       vLineColor: function (i, node) {
-        return HISTOGRAM_HELPER_TABLE_BORDER_COLOR;
+        return DATA_TABLE_BORDER_COLOR;
       },
-    }, // optional
+    },
     table: {
       headerRows: 2,
-      // keepWithHeaderRows: 1,
       body: [
         [
           {
-            text: "",
-            style: "tableHeader",
+            ...createTableHeaderText(""),
             colSpan: 4,
-            alignment: "center",
-            color: DATA_TABLE_HEADER_TEXT_COLOR,
           },
           {},
           {},
           {},
-          {
-            text: "System estimated",
-            style: "tableHeader",
-            colSpan: 3,
-            alignment: "center",
-            color: DATA_TABLE_HEADER_TEXT_COLOR,
-          },
+          { ...createTableHeaderText("System estimated"), colSpan: 3 },
           {},
           {},
         ],
         [
-          {
-            text: "From cage [nr]",
-            style: "tableHeader",
-            alignment: "center",
-            color: DATA_TABLE_HEADER_TEXT_COLOR,
-          },
-          {
-            text: "To RSW Tank [nr]",
-            style: "tableHeader",
-            alignment: "center",
-            color: DATA_TABLE_HEADER_TEXT_COLOR,
-          },
-          {
-            text: "Total Time [HH:MM:SS]",
-            style: "tableHeader",
-            alignment: "center",
-            color: DATA_TABLE_HEADER_TEXT_COLOR,
-          },
-          {
-            text: "Waiting [HH:MM:SS]",
-            style: "tableHeader",
-            alignment: "center",
-            color: DATA_TABLE_HEADER_TEXT_COLOR,
-          },
-          {
-            text: "Biomass [kg]",
-            style: "tableHeader",
-            alignment: "center",
-            color: DATA_TABLE_HEADER_TEXT_COLOR,
-          },
-          {
-            text: "Quantum [fish]",
-            style: "tableHeader",
-            alignment: "center",
-            color: DATA_TABLE_HEADER_TEXT_COLOR,
-          },
-          {
-            text: "Avg. Biomass [kg/fisk]",
-            style: "tableHeader",
-            alignment: "center",
-            color: DATA_TABLE_HEADER_TEXT_COLOR,
-          },
+          createTableHeaderText("From cage [nr]"),
+          createTableHeaderText("To RSW Tank [nr]"),
+          createTableHeaderText("Total Time [HH:MM:SS]"),
+          createTableHeaderText("Waiting [HH:MM:SS]"),
+          createTableHeaderText("Biomass [kg]"),
+          createTableHeaderText("Quantum [fish]"),
+          createTableHeaderText("Avg. Biomass [kg/fisk]"),
         ],
+        ...tableDataComponents,
+      ],
+    },
+  };
+}
+
+function createCageCommentTable(tableData = []) {
+  const tableDataComponents = [];
+  if (tableData.length === 0) {
+    return { text: "No data for cage comment table" };
+  } else {
+    for (const row of tableData) {
+      const newRow = row.map((column) => {
+        return { ...createTableBodyText(column), alignment: "left" };
+      });
+      tableDataComponents.push(newRow);
+    }
+  }
+  return {
+    layout: {
+      fillColor: function (rowIndex, node, columnIndex) {
+        if (rowIndex < 1) return DATA_TABLE_HEADER_COLOR;
+        return DATA_TABLE_ROW_COLOR;
+      },
+      hLineWidth: function (i, node) {
+        return i === 1 ? 2 : 0;
+      },
+      vLineWidth: function (i, node) {
+        return 2;
+      },
+      hLineColor: function (i, node) {
+        return DATA_TABLE_BORDER_COLOR;
+      },
+      vLineColor: function (i, node) {
+        return DATA_TABLE_BORDER_COLOR;
+      },
+    },
+    table: {
+      headerRows: 1,
+      widths: ["auto", "*"],
+      body: [
+        [
+          createTableHeaderText("Cage[nr]"),
+          { ...createTableHeaderText("Comment"), alignment: "left" },
+        ],
+        ...tableDataComponents,
       ],
     },
   };
@@ -374,7 +403,15 @@ var docDefinition = (data) => {
       createSubChapterSeperator("01.01-Subsection"),
       createDataPointSeperator("A datapoint seperator"),
       createDataPointTextComponent({ title: "Process", content: "100kg" }),
-      createCageTable(),
+      createCageTable([
+        ["1", "1-3", "22:30", "22:30", "12345", "1234567", "12.3"],
+        ["1", "1-3", "22:30", "22:30", "12345", "1234567", "12.3"],
+      ]),
+      createCageCommentTable([
+        ["1", "abcdef"],
+        ["1", "abcdef"],
+        ["1", "abcdef"],
+      ]),
       { text: "-------- END OF COMPONENTS", margin: [0, 0, 0, 30] },
       createChapterSeperator("01-Processing site"),
       {
