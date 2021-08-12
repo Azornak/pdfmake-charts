@@ -503,6 +503,53 @@ function createCageCommentTable(tableData = []) {
     },
   };
 }
+
+/**
+ * Creats a table for process notes. It has 3 columns for each row.
+ * @param {array} tableData values for the data rows
+ * @returns table definition object
+ */
+function createProcessNotesTable(tableData = []) {
+  const tableDataComponents = [];
+  if (tableData.length === 0) {
+    return { text: "No data for process notes table" };
+  } else {
+    for (const row of tableData) {
+      const newRow = row.map((column, index) => {
+        if (index < 2) return createTableBodyText(column, "center");
+        return createTableBodyText(column);
+      });
+      tableDataComponents.push(newRow);
+    }
+  }
+  return {
+    layout: {
+      fillColor: function (rowIndex, node, columnIndex) {
+        if (rowIndex < 1) return DATA_TABLE_HEADER_COLOR;
+        return DATA_TABLE_ROW_COLOR;
+      },
+      hLineWidth: function (i, node) {
+        return i === 1 ? 2 : 0;
+      },
+      vLineWidth: function (i, node) {
+        return 2;
+      },
+      hLineColor: function (i, node) {
+        return DATA_TABLE_BORDER_COLOR;
+      },
+      vLineColor: function (i, node) {
+        return DATA_TABLE_BORDER_COLOR;
+      },
+    },
+    margin: TABLE_MARGINS,
+    table: {
+      headerRows: 1,
+      widths: ["auto", "auto", "*"],
+      body: [
+        [
+          createTableHeaderText("Work", "center"),
+          createTableHeaderText("Data & Time", "center"),
+          createTableHeaderText("Comment"),
         ],
         ...tableDataComponents,
       ],
