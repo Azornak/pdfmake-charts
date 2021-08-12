@@ -452,14 +452,20 @@ function createCageTable(tableData = []) {
   };
 }
 
+/**
+ * Creats a table for cage comments. It has 2 columns for each row.
+ * @param {array} tableData values for the data rows
+ * @returns table definition object
+ */
 function createCageCommentTable(tableData = []) {
   const tableDataComponents = [];
   if (tableData.length === 0) {
     return { text: "No data for cage comment table" };
   } else {
     for (const row of tableData) {
-      const newRow = row.map((column) => {
-        return { ...createTableBodyText(column), alignment: "left" };
+      const newRow = row.map((column, index) => {
+        if (index === 0) return createTableBodyText(column, "center");
+        return createTableBodyText(column);
       });
       tableDataComponents.push(newRow);
     }
@@ -483,13 +489,20 @@ function createCageCommentTable(tableData = []) {
         return DATA_TABLE_BORDER_COLOR;
       },
     },
+    margin: TABLE_MARGINS,
     table: {
       headerRows: 1,
       widths: ["auto", "*"],
       body: [
         [
-          createTableHeaderText("Cage[nr]"),
-          { ...createTableHeaderText("Comment"), alignment: "left" },
+          createTableHeaderText("Cage[nr]", "center"),
+          createTableHeaderText("Comment"),
+        ],
+        ...tableDataComponents,
+      ],
+    },
+  };
+}
         ],
         ...tableDataComponents,
       ],
