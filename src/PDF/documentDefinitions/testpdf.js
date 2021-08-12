@@ -382,6 +382,11 @@ function createThrowTable(tableData = []) {
   };
 }
 
+/**
+ * Creats a table for cage data. It has 7 columns for each row.
+ * @param {array} tableData values for the data rows
+ * @returns table definition object
+ */
 function createCageTable(tableData = []) {
   const tableDataComponents = [];
   if (tableData.length === 0) {
@@ -389,7 +394,7 @@ function createCageTable(tableData = []) {
   } else {
     for (const row of tableData) {
       const newRow = row.map((column) => {
-        return createTableBodyText(column);
+        return createTableBodyText(column, "center");
       });
       tableDataComponents.push(newRow);
     }
@@ -413,29 +418,33 @@ function createCageTable(tableData = []) {
         return DATA_TABLE_BORDER_COLOR;
       },
     },
+    margin: TABLE_MARGINS,
     table: {
       headerRows: 2,
       body: [
         [
           {
-            ...createTableHeaderText(""),
+            ...createTableHeaderText("", "center"),
             colSpan: 4,
           },
           {},
           {},
           {},
-          { ...createTableHeaderText("System estimated"), colSpan: 3 },
+          {
+            ...createTableHeaderText("System estimated", "center"),
+            colSpan: 3,
+          },
           {},
           {},
         ],
         [
-          createTableHeaderText("From cage [nr]"),
-          createTableHeaderText("To RSW Tank [nr]"),
-          createTableHeaderText("Total Time [HH:MM:SS]"),
-          createTableHeaderText("Waiting [HH:MM:SS]"),
-          createTableHeaderText("Biomass [kg]"),
-          createTableHeaderText("Quantum [fish]"),
-          createTableHeaderText("Avg. Biomass [kg/fisk]"),
+          createTableHeaderText("From cage [nr]", "center"),
+          createTableHeaderText("To RSW Tank [nr]", "center"),
+          createTableHeaderText("Total Time [HH:MM:SS]", "center"),
+          createTableHeaderText("Waiting [HH:MM:SS]", "center"),
+          createTableHeaderText("Biomass [kg]", "center"),
+          createTableHeaderText("Quantum [fish]", "center"),
+          createTableHeaderText("Avg. Biomass [kg/fisk]", "center"),
         ],
         ...tableDataComponents,
       ],
