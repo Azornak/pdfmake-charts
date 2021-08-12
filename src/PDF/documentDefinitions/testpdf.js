@@ -175,16 +175,11 @@ function createImageComponent(imageConfig) {
  */
 function createGraphHelperTable(tableValues) {
   const { titles, data } = tableValues;
-  console.log(data);
   const headers = titles.map((title) => {
     return {
       border: [true, false, true, false],
       fillColor: HISTOGRAM_HELPER_TABLE_HEADER_COLOR,
-      text: {
-        text: title,
-        color: HISTOGRAM_HELPER_TABLE_HEADER_TEXT_COLOR,
-        alignment: "center",
-      },
+      ...createTableHeaderText(title),
     };
   });
   return {
@@ -595,6 +590,54 @@ var docDefinition = (data) => {
         ["1", "abcdef"],
         ["1", "abcdef"],
         ["1", "abcdef"],
+      ]),
+      createThrowTable([
+        [
+          "1",
+          "1",
+          "kulerekke",
+          "12:00",
+          "12:00",
+          "12:00",
+          "123",
+          "12345",
+          "123456",
+          "1234",
+        ],
+        [
+          "1",
+          "1",
+          "kulerekke",
+          "12:00",
+          "12:00",
+          "12:00",
+          "123",
+          "12345",
+          "123456",
+          "1234",
+        ],
+        [
+          "1",
+          "1",
+          "kulerekke",
+          "12:00",
+          "12:00",
+          "12:00",
+          "123",
+          "12345",
+          "123456",
+          "1234",
+        ],
+      ]),
+      createCommentBlock(
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Malit profecta versatur nomine ocurreret multavit, ofciis viveremus aeternum superstitio suspicor alia nostram, quando nostros congressus susceperant concederetur leguntur iam, vigiliae democritea tantopere causae, atilii plerumque"
+      ),
+      createProcessNotesTable([
+        [
+          "Throw",
+          "22/03/2021 12:55",
+          " Lorem ipsum dolor sit amet, consectetur adipisicing elit. Malit profecta versatur nomine ocurreret multavit, ofciis viveremus aeternum superstitio suspicor alia nostram, quando nostros congressus susceperant concederetur leguntur iam, vigiliae democritea tantopere causae, atilii plerumque ",
+        ],
       ]),
       { text: "-------- END OF COMPONENTS", margin: [0, 0, 0, 30] },
       createChapterSeperator("01-Processing site"),
