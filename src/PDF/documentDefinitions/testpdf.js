@@ -1,3 +1,4 @@
+import { checkboxSVG, seperatorLineSVG } from "../assets/svgs";
 import { checkBoxCheckedSVG, checkBoxSVG } from "./checkbox";
 
 const DOCUMENT_WIDTH = 555;
@@ -45,13 +46,11 @@ function breakPage() {
  * @param {number} percentWidth percentage of document width 1-100
  * @returns returns an svg line component definition
  */
-function createSeperatorLine(height, percentWidth = 100) {
+function createSeperatorLine(height, color, percentWidth = 100) {
   if (percentWidth > 100 || percentWidth < 1) percentWidth = 100;
   const width = (percentWidth / 100) * DOCUMENT_WIDTH;
   return {
-    svg: `<svg width="${width}" height="${
-      height + 10
-    }"> <rect y="5" width="100%" height="${height}" style="fill:${SEPERATOR_LINE_COLOR};" /> </svg>`,
+    svg: seperatorLineSVG(width, height, color),
   };
 }
 
@@ -65,7 +64,7 @@ function createChapterSeperator(chapterTitle) {
   return {
     stack: [
       createHeader(chapterTitle),
-      createSeperatorLine(CHAPTER_LINE_HEIGHT, 100),
+      createSeperatorLine(CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR),
     ],
   };
 }
@@ -80,7 +79,7 @@ function createSubChapterSeperator(subChapterTitle, width = 100) {
   return {
     stack: [
       createSubHeader(subChapterTitle),
-      createSeperatorLine(SUB_CHAPTER_LINE_HEIGHT, 100),
+      createSeperatorLine(CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR, width),
     ],
   };
 }
@@ -95,7 +94,7 @@ function createDataPointSeperator(dataPointTitle, width = 100) {
   return {
     stack: [
       createDataPointHeader(dataPointTitle),
-      createSeperatorLine(DATA_POINT_LINE_HEIGHT, width),
+      createSeperatorLine(CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR, width),
     ],
   };
 }
@@ -110,7 +109,7 @@ function createDataPointComponent(dataPointConfig, width = 30) {
   return {
     stack: [
       createDataPointHeader(title),
-      createSeperatorLine(DATA_POINT_LINE_HEIGHT, width),
+      createSeperatorLine(CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR, width),
       component,
     ],
   };
@@ -584,9 +583,10 @@ var docDefinition = (data) => {
         { checked: false, label: "no" },
         { checked: true, label: "absolutely" },
       ]),
-      createSeperatorLine(CHAPTER_LINE_HEIGHT, 100),
-      createSeperatorLine(SUB_CHAPTER_LINE_HEIGHT, 100),
-      createSeperatorLine(DATA_POINT_LINE_HEIGHT, 100),
+      createSeperatorLine(CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR),
+      createSeperatorLine(SUB_CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR, 100),
+      createSeperatorLine(SUB_CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR, 50),
+      createSeperatorLine(DATA_POINT_LINE_HEIGHT, SEPERATOR_LINE_COLOR, 100),
       createChapterSeperator("01-Main section"),
       createSubChapterSeperator("01.01-Subsection"),
       createDataPointSeperator("A datapoint seperator"),
