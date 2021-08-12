@@ -5,8 +5,8 @@
  */
 export function generateCanvas() {
   const canvas = document.createElement("canvas");
-  // canvas.style.position = "absolute";
-  // canvas.style.top = "-3000px";
+  canvas.style.position = "absolute";
+  canvas.style.top = "-3000px";
 
   document.body.appendChild(canvas);
   return canvas;
