@@ -306,6 +306,82 @@ function createCommentBlock(commentText) {
   };
 }
 
+/**
+ * Creats a table for throw data. It has 10 columns for each row.
+ * @param {array} tableData values for the data rows
+ * @returns table definition object
+ */
+function createThrowTable(tableData = []) {
+  const tableDataComponents = [];
+  if (tableData.length === 0) {
+    return { text: "No data for throw table" };
+  } else {
+    for (const row of tableData) {
+      const newRow = row.map((column) => {
+        return createTableBodyText(column, "center");
+      });
+      tableDataComponents.push(newRow);
+    }
+  }
+  return {
+    layout: {
+      fillColor: function (rowIndex, node, columnIndex) {
+        if (rowIndex < 2) return DATA_TABLE_HEADER_COLOR;
+        return DATA_TABLE_ROW_COLOR;
+      },
+      hLineWidth: function (i, node) {
+        return i === 1 ? 2 : 0;
+      },
+      vLineWidth: function (i, node) {
+        return 2;
+      },
+      hLineColor: function (i, node) {
+        return DATA_TABLE_BORDER_COLOR;
+      },
+      vLineColor: function (i, node) {
+        return DATA_TABLE_BORDER_COLOR;
+      },
+    },
+    margin: TABLE_MARGINS,
+    table: {
+      headerRows: 2,
+      body: [
+        [
+          {
+            ...createTableHeaderText("", "center"),
+            colSpan: 6,
+          },
+          {},
+          {},
+          {},
+          {},
+          {},
+          {
+            ...createTableHeaderText("System estimated", "center"),
+            colSpan: 4,
+          },
+          {},
+          {},
+          {},
+        ],
+        [
+          createTableHeaderText("Cage [nr]", "center"),
+          createTableHeaderText("Throw [nr]", "center"),
+          createTableHeaderText("Tool type", "center"),
+          createTableHeaderText("Start [HH:MM]", "center"),
+          createTableHeaderText("Stop [HH:MM]", "center"),
+          createTableHeaderText("Time", "center"),
+          createTableHeaderText("Pump speed [rpm]", "center"),
+          createTableHeaderText("Biomass [kg]", "center"),
+          createTableHeaderText("Quantu m [fish]", "center"),
+          createTableHeaderText("Efficiency [fish/min]", "center"),
+        ],
+        ...tableDataComponents,
+      ],
+    },
+  };
+}
+
 function createCageTable(tableData = []) {
   const tableDataComponents = [];
   if (tableData.length === 0) {
