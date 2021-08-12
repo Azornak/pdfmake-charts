@@ -250,19 +250,19 @@ function createCheckboxDataPoint(checkboxDataPointConfig) {
   return createDataPointComponent({ title, component });
 }
 
-function createTableHeaderText(text) {
+function createTableHeaderText(text, alignment = "left") {
   return {
     text,
     style: "tableHeader",
-    alignment: "center",
+    alignment,
     color: DATA_TABLE_HEADER_TEXT_COLOR,
     margin: [2, 3, 2, 3],
   };
 }
-function createTableBodyText(text) {
+function createTableBodyText(text, alignment = "left") {
   return {
     text: text,
-    alignment: "center",
+    alignment,
     margin: [2, 3, 2, 3],
   };
 }
