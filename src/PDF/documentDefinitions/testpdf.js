@@ -105,12 +105,12 @@ function createDataPointSeperator(dataPointTitle, width = 100) {
  * @param {object} dataPointConfig datapoint object with title and
  * @returns returns datapoint definition object
  */
-function createDataPointComponent(dataPointConfig) {
+function createDataPointComponent(dataPointConfig, width = 30) {
   const { title, component } = dataPointConfig;
   return {
     stack: [
       createDataPointHeader(title),
-      createSeperatorLine(DATA_POINT_LINE_HEIGHT, 30),
+      createSeperatorLine(DATA_POINT_LINE_HEIGHT, width),
       component,
     ],
   };
@@ -145,7 +145,7 @@ function createHistogramGraphComponents(graphConfig) {
     },
   };
 
-  return [createDataPointSeperator(title), contentTable];
+  return createDataPointComponent({ title, component: contentTable }, 100);
 }
 
 /**
@@ -156,10 +156,8 @@ function createHistogramGraphComponents(graphConfig) {
  */
 function createImageComponent(imageConfig) {
   const { image, title } = imageConfig;
-
-  return {
-    stack: [createDataPointSeperator(title), { image, width: DOCUMENT_WIDTH }],
-  };
+  const imageComponent = { image, width: DOCUMENT_WIDTH };
+  return createDataPointComponent({ title, component: imageComponent }, 100);
 }
 
 /**
@@ -690,7 +688,7 @@ var docDefinition = (data) => {
           ],
         },
       },
-      ...createHistogramGraphComponents({
+      createHistogramGraphComponents({
         title: "RSW - temperatures",
         graph: data.barChart1,
         table: {
