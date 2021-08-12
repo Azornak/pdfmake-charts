@@ -175,11 +175,22 @@ function createImageComponent(imageConfig) {
  */
 function createGraphHelperTable(tableValues) {
   const { titles, data } = tableValues;
+  const tableDataComponents = [];
+  if (data.length === 0) {
+    return { text: "No data for table" };
+  } else {
+    for (const row of data) {
+      const newRow = row.map((column) => {
+        return createTableBodyText(column, "center");
+      });
+      tableDataComponents.push(newRow);
+    }
+  }
   const headers = titles.map((title) => {
     return {
       border: [true, false, true, false],
       fillColor: HISTOGRAM_HELPER_TABLE_HEADER_COLOR,
-      ...createTableHeaderText(title),
+      ...createTableHeaderText(title, "center"),
     };
   });
   return {
@@ -207,7 +218,7 @@ function createGraphHelperTable(tableValues) {
       headerRows: 1,
       widths: ["*", "*"],
       alignment: "center",
-      body: [headers, ...data],
+      body: [headers, ...tableDataComponents],
     },
   };
 }
