@@ -1,5 +1,4 @@
-import { seperatorLineSVG } from "../assets/svgs";
-import { checkBoxCheckedSVG, checkBoxSVG } from "./checkbox";
+import { seperatorLineSVG, checkboxSVG } from "../assets/svgs";
 import createProcessNotesTable from "./tables/processNotesTable";
 import createCageCommentTable from "./tables/cageCommentTable";
 import createCageTable from "./tables/cageTable";
@@ -12,9 +11,8 @@ const CHAPTER_LINE_HEIGHT = 5;
 const SUB_CHAPTER_LINE_HEIGHT = 3;
 const DATA_POINT_LINE_HEIGHT = 0.5;
 const SEPERATOR_LINE_COLOR = "#55D2E9";
-//
-const TABLE_MARGINS = [0, 15, 0, 0];
-const TABLE_TEXT_MARGINS = [2, 3, 2, 3];
+
+const checkbox = checkboxSVG("#003B4A", "#55D2E9");
 
 /****************************
  * TEXT COMPONENTS
@@ -240,7 +238,7 @@ function createCheckboxesComponent(checkboxesConfig) {
 
   for (const checkItem of checkboxesConfig) {
     checkboxes.push(
-      { svg: checkItem.checked ? checkBoxCheckedSVG : checkBoxSVG },
+      { svg: checkItem.checked ? checkbox.checked : checkbox.unchecked },
       { text: checkItem.label }
     );
   }
