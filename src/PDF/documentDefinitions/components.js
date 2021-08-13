@@ -310,7 +310,7 @@ const blocks = {
 function createGraphHelperTable(tableValues) {
   const { titles, data } = tableValues;
   const transformer = (column) => {
-    return createTableBodyText(column, "center");
+    return tableHelper.createTableRowText(column, { alignment: "center" });
   };
 
   const tableDataComponents = tableHelper.transformTableRowText(
@@ -330,14 +330,6 @@ function createGraphHelperTable(tableValues) {
     body: [headers, ...tableDataComponents],
   };
   return tableHelper.baseColorTable(table);
-}
-
-function createTableBodyText(text, alignment = "left") {
-  return {
-    text: text,
-    alignment,
-    style: "tableRow",
-  };
 }
 
 /**
@@ -497,8 +489,9 @@ function createCageCommentTable(tableData = []) {
  */
 function createProcessNotesTable(tableData = []) {
   const transformer = (column, index) => {
-    if (index < 2) return createTableBodyText(column, "center");
-    return createTableBodyText(column);
+    if (index < 2)
+      return tableHelper.createTableRowText(column, { alignment: "center" });
+    return tableHelper.createTableRowText(column);
   };
   const tableDataComponents = tableHelper.transformTableRowText(
     tableData,
