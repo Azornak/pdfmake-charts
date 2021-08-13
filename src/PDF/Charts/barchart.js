@@ -1,4 +1,5 @@
 import Chart from "chart.js/auto";
+import { optimarColorPalette } from "../assets/colors";
 import { generateCanvas, getTitleConfig } from "./helpers";
 
 /**
@@ -21,8 +22,8 @@ function setBarStyle(datasets) {
   return datasets.map((dataset) => {
     return {
       ...dataset,
-      backgroundColor: ["rgb(48, 156, 170)"],
-      borderColor: ["rgb(48, 156, 170)"],
+      backgroundColor: [optimarColorPalette.primaryLogo],
+      borderColor: [optimarColorPalette.primaryLogo],
       borderWidth: 1,
     };
   });

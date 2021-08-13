@@ -1,5 +1,6 @@
 import Chart from "chart.js/auto";
 import annotationPlugin from "chartjs-plugin-annotation";
+import { getColorFromPalette } from "../assets/colors";
 import { generateCanvas, getTitleConfig } from "./helpers";
 
 Chart.register(annotationPlugin);
@@ -82,10 +83,11 @@ function getRandomRgbaColor(opacity = 0.4) {
  * @returns mutated data object
  */
 function setDatasetSettings(data) {
-  return data.map((set) => {
+  return data.map((set, index) => {
     set.fill = CHART_FILL_LINES;
     set.tension = CHART_TENSION;
-    set.borderColor = getRandomRgbaColor();
+    set.borderColor = getColorFromPalette(index);
+    set.borderWidth = 0.65;
     return set;
   });
 }
