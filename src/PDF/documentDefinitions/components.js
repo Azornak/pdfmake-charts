@@ -1,6 +1,11 @@
-import { checkboxSVG, seperatorLineSVG } from "../assets/svgs";
+import { seperatorLineSVG } from "../assets/svgs";
 import { checkBoxCheckedSVG, checkBoxSVG } from "./checkbox";
-import { tableHelper } from "./tableHelpers";
+import createProcessNotesTable from "./tables/processNotesTable";
+import createCageCommentTable from "./tables/cageCommentTable";
+import createCageTable from "./tables/cageTable";
+import createThrowTable from "./tables/throwTable";
+import createGraphHelperTable from "./tables/graphHelperTable";
+import createCommentBlock from "./tables/commentBlock";
 
 const DOCUMENT_WIDTH = 555;
 const CHAPTER_LINE_HEIGHT = 5;
@@ -8,18 +13,6 @@ const SUB_CHAPTER_LINE_HEIGHT = 3;
 const DATA_POINT_LINE_HEIGHT = 0.5;
 const SEPERATOR_LINE_COLOR = "#55D2E9";
 //
-const HISTOGRAM_HELPER_TABLE_HEADER_COLOR = "#309CAA";
-const HISTOGRAM_HELPER_TABLE_HEADER_TEXT_COLOR = "#FFFFFF";
-const HISTOGRAM_HELPER_TABLE_N1_ROW_COLOR = "#E9EBF5";
-const HISTOGRAM_HELPER_TABLE_N2_ROW_COLOR = "#CFD5EA";
-const HISTOGRAM_HELPER_TABLE_BORDER_COLOR = "#FFF";
-//
-const DATA_TABLE_HEADER_COLOR = "#7F7F7F";
-const DATA_TABLE_HEADER_TEXT_COLOR = "#FFFFFF";
-const DATA_TABLE_ROW_COLOR = "#F2F2F2";
-const DATA_TABLE_BORDER_COLOR = "#FFF";
-//
-const DATA_POINT_TEXT_MARGINS = [1, 3, 0, 3];
 const TABLE_MARGINS = [0, 15, 0, 0];
 const TABLE_TEXT_MARGINS = [2, 3, 2, 3];
 
@@ -172,7 +165,7 @@ function createDataPointTextComponent(textPointConfig) {
 
   const component = {
     text: content,
-    margin: DATA_POINT_TEXT_MARGINS,
+    style: "dataPointText",
   };
   return createDataPointComponent({ title, component });
 }
@@ -295,223 +288,6 @@ const blocks = {
 /****************************
  * TABLE COMPONENTS
  ****************************/
-
-/**
- * Creates a grapgh helper table to visualize value/label for
- * a histogram graph.
- * The provided object is in format 
- * {
- *  titles: [string, string,...]
-    data: [ [string,string, ...], [string, string,...]]
- * }
- * @param {object} tableValues object of table data
- * @returns returns a table definition object
- */
-function createGraphHelperTable(tableValues) {
-  const { titles, data } = tableValues;
-  const transformer = (column) => {
-    return tableHelper.createTableRowText(column, { alignment: "center" });
-  };
-
-  const tableDataComponents = tableHelper.transformTableRowText(
-    data,
-    transformer
-  );
-
-  const headers = titles.map((title) => {
-    return tableHelper.createTableHeaderText(title, {
-      alignment: "center",
-      fill: HISTOGRAM_HELPER_TABLE_HEADER_COLOR,
-    });
-  });
-  const table = {
-    widths: ["*", "*"],
-    alignment: "center",
-    body: [headers, ...tableDataComponents],
-  };
-  return tableHelper.baseColorTable(table);
-}
-
-/**
- * Creates a singl column comment table with a fixed header row with title:Comment, and
- * a single row with the provided comment text.
- * Returns the definiton object.
- * @param {string} commentText comment text to display
- * @returns comment table defintion object
- */
-function createCommentBlock(commentText) {
-  const body = [
-    [tableHelper.createTableHeaderText("Comment")],
-    [tableHelper.createTableRowText(commentText)],
-  ];
-  return tableHelper.baseDataTable({ body });
-}
-
-/**
- * Creats a table for throw data. It has 10 columns for each row.
- * @param {array} tableData values for the data rows
- * @returns table definition object
- */
-function createThrowTable(tableData = []) {
-  const header = (text) =>
-    tableHelper.createTableHeaderText(text, { alignment: "center" });
-
-  const transformer = (column) =>
-    tableHelper.createTableRowText(column, { alignment: "center" });
-
-  const tableDataComponents = tableHelper.transformTableRowText(
-    tableData,
-    transformer
-  );
-
-  const table = {
-    headerRows: 2,
-    body: [
-      [
-        {
-          ...header(""),
-          colSpan: 6,
-        },
-        {},
-        {},
-        {},
-        {},
-        {},
-        {
-          ...header("System estimated"),
-          colSpan: 4,
-        },
-        {},
-        {},
-        {},
-      ],
-      [
-        header("Cage [nr]"),
-        header("Throw [nr]"),
-        header("Tool type"),
-        header("Start [HH:MM]"),
-        header("Stop [HH:MM]"),
-        header("Time [HH:MM]"),
-        header("Pump Speed [rpm]"),
-        header("Biomass [kg]"),
-        header("Quantum [fish]"),
-        header("Efficiency [fish/min]"),
-      ],
-      ...tableDataComponents,
-    ],
-  };
-  return tableHelper.baseDataTable(table);
-}
-
-/**
- * Creats a table for cage data. It has 7 columns for each row.
- * @param {array} tableData values for the data rows
- * @returns table definition object
- */
-function createCageTable(tableData = []) {
-  const header = (text) =>
-    tableHelper.createTableHeaderText(text, { alignment: "center" });
-
-  const transformer = (column) =>
-    tableHelper.createTableRowText(column, { alignment: "center" });
-
-  const tableDataComponents = tableHelper.transformTableRowText(
-    tableData,
-    transformer
-  );
-
-  const table = {
-    body: [
-      [
-        {
-          ...header(""),
-          colSpan: 4,
-        },
-        {},
-        {},
-        {},
-        {
-          ...header("System estimated"),
-          colSpan: 3,
-        },
-        {},
-        {},
-      ],
-      [
-        header("From cage [nr]"),
-        header("To RSW Tank [nr]"),
-        header("Total Time [HH:MM:SS]"),
-        header("Waiting [HH:MM:SS]"),
-        header("Biomass [kg]"),
-        header("Quantum [fish]"),
-        header("Avg. Biomass [kg/fisk]"),
-      ],
-      ...tableDataComponents,
-    ],
-  };
-  return tableHelper.baseDataTable(table);
-}
-
-/**
- * Creats a table for cage comments. It has 2 columns for each row.
- * @param {array} tableData values for the data rows
- * @returns table definition object
- */
-function createCageCommentTable(tableData = []) {
-  const transformer = (column, index) => {
-    if (index === 0) {
-      return tableHelper.createTableRowText(column, { alignment: "center" });
-    }
-    return tableHelper.createTableRowText(column);
-  };
-
-  const tableDataComponents = tableHelper.transformTableRowText(
-    tableData,
-    transformer
-  );
-  const table = {
-    widths: ["auto", "*"],
-    body: [
-      [
-        tableHelper.createTableHeaderText("Cage[nr]", { alignment: "center" }),
-        tableHelper.createTableHeaderText("Comment"),
-      ],
-      ...tableDataComponents,
-    ],
-  };
-  return tableHelper.baseDataTable(table, 1);
-}
-
-/**
- * Creats a table for process notes. It has 3 columns for each row.
- * @param {array} tableData values for the data rows
- * @returns table definition object
- */
-function createProcessNotesTable(tableData = []) {
-  const transformer = (column, index) => {
-    if (index < 2)
-      return tableHelper.createTableRowText(column, { alignment: "center" });
-    return tableHelper.createTableRowText(column);
-  };
-  const tableDataComponents = tableHelper.transformTableRowText(
-    tableData,
-    transformer
-  );
-  const table = {
-    widths: ["auto", "auto", "*"],
-    body: [
-      [
-        tableHelper.createTableHeaderText("Work", { alignment: "center" }),
-        tableHelper.createTableHeaderText("Data & Time", {
-          alignment: "center",
-        }),
-        tableHelper.createTableHeaderText("Comment"),
-      ],
-      ...tableDataComponents,
-    ],
-  };
-  return tableHelper.baseDataTable(table);
-}
 
 const table = {
   createCageTable,

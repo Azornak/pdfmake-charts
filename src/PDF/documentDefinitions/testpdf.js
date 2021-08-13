@@ -1,5 +1,5 @@
 import { table, headers, chapters, blocks, utils } from "./components";
-const DOCUMENT_WIDTH = 555;
+
 const CHAPTER_LINE_HEIGHT = 5;
 const SUB_CHAPTER_LINE_HEIGHT = 3;
 const DATA_POINT_LINE_HEIGHT = 0.5;
@@ -20,6 +20,7 @@ const TITLE_MARGINS = [1, 15, 0, 3];
 const DATA_POINT_TEXT_MARGINS = [1, 3, 0, 3];
 const TABLE_MARGINS = [0, 15, 0, 0];
 const TABLE_TEXT_MARGINS = [0, 5, 2, 5];
+
 var docDefinition = (data) => {
   console.dir(data);
   return {
@@ -50,6 +51,10 @@ var docDefinition = (data) => {
       dataPointHeader: {
         bold: false,
         margin: TITLE_MARGINS,
+      },
+      dataPointText: {
+        bold: false,
+        margin: DATA_POINT_TEXT_MARGINS,
       },
       tableHeader: {
         bold: true,
