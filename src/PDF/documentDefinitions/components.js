@@ -1,5 +1,6 @@
 import { checkboxSVG, seperatorLineSVG } from "../assets/svgs";
 import { checkBoxCheckedSVG, checkBoxSVG } from "./checkbox";
+import { tableHelper } from "./tableHelpers";
 
 const DOCUMENT_WIDTH = 555;
 const CHAPTER_LINE_HEIGHT = 5;
@@ -18,7 +19,6 @@ const DATA_TABLE_HEADER_TEXT_COLOR = "#FFFFFF";
 const DATA_TABLE_ROW_COLOR = "#F2F2F2";
 const DATA_TABLE_BORDER_COLOR = "#FFF";
 //
-const TITLE_MARGINS = [1, 15, 0, 3];
 const DATA_POINT_TEXT_MARGINS = [1, 3, 0, 3];
 const TABLE_MARGINS = [0, 15, 0, 0];
 const TABLE_TEXT_MARGINS = [2, 3, 2, 3];
@@ -28,13 +28,13 @@ const TABLE_TEXT_MARGINS = [2, 3, 2, 3];
  ****************************/
 
 function createSectionHeader(text) {
-  return { text, style: "header", margin: TITLE_MARGINS };
+  return { text, style: "header" };
 }
 function createSubsectionHeader(text) {
-  return { text, style: "subHeader", margin: TITLE_MARGINS };
+  return { text, style: "subHeader" };
 }
 function createDataPointHeader(text) {
-  return { text, style: "dataPointHeader", margin: TITLE_MARGINS };
+  return { text, style: "dataPointHeader" };
 }
 
 const headers = {
@@ -156,7 +156,7 @@ function createDataPointComponent(dataPointConfig, width = 30) {
   return {
     stack: [
       createDataPointHeader(title),
-      createSeperatorLine(CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR, width),
+      createSeperatorLine(DATA_POINT_LINE_HEIGHT, SEPERATOR_LINE_COLOR, width),
       component,
     ],
   };
@@ -309,69 +309,34 @@ const blocks = {
  */
 function createGraphHelperTable(tableValues) {
   const { titles, data } = tableValues;
-  const tableDataComponents = [];
-  if (data.length === 0) {
-    return { text: "No data for table" };
-  } else {
-    for (const row of data) {
-      const newRow = row.map((column) => {
-        return createTableBodyText(column, "center");
-      });
-      tableDataComponents.push(newRow);
-    }
-  }
+  const transformer = (column) => {
+    return createTableBodyText(column, "center");
+  };
+
+  const tableDataComponents = tableHelper.transformTableRowText(
+    data,
+    transformer
+  );
+
   const headers = titles.map((title) => {
-    return {
-      border: [true, false, true, false],
-      fillColor: HISTOGRAM_HELPER_TABLE_HEADER_COLOR,
-      ...createTableHeaderText(title, "center"),
-    };
-  });
-  return {
-    layout: {
-      fillColor: function (rowIndex, node, columnIndex) {
-        return rowIndex % 2 === 0
-          ? HISTOGRAM_HELPER_TABLE_N1_ROW_COLOR
-          : HISTOGRAM_HELPER_TABLE_N2_ROW_COLOR;
-      },
-      hLineWidth: function (i, node) {
-        return i === 1 ? 2 : 0;
-      },
-      vLineWidth: function (i, node) {
-        return 2;
-      },
-      hLineColor: function (i, node) {
-        return HISTOGRAM_HELPER_TABLE_BORDER_COLOR;
-      },
-      vLineColor: function (i, node) {
-        return HISTOGRAM_HELPER_TABLE_BORDER_COLOR;
-      },
-    },
-
-    table: {
-      headerRows: 1,
-      widths: ["*", "*"],
+    return tableHelper.createTableHeaderText(title, {
       alignment: "center",
-      body: [headers, ...tableDataComponents],
-    },
+      fill: HISTOGRAM_HELPER_TABLE_HEADER_COLOR,
+    });
+  });
+  const table = {
+    widths: ["*", "*"],
+    alignment: "center",
+    body: [headers, ...tableDataComponents],
   };
-}
-
-function createTableHeaderText(text, alignment = "left") {
-  return {
-    text,
-    style: "tableHeader",
-    alignment,
-    color: DATA_TABLE_HEADER_TEXT_COLOR,
-    margin: TABLE_TEXT_MARGINS,
-  };
+  return tableHelper.baseColorTable(table);
 }
 
 function createTableBodyText(text, alignment = "left") {
   return {
     text: text,
     alignment,
-    margin: TABLE_TEXT_MARGINS,
+    style: "tableRow",
   };
 }
 
@@ -383,34 +348,11 @@ function createTableBodyText(text, alignment = "left") {
  * @returns comment table defintion object
  */
 function createCommentBlock(commentText) {
-  return {
-    layout: {
-      fillColor: function (rowIndex, node, columnIndex) {
-        if (rowIndex < 1) return DATA_TABLE_HEADER_COLOR;
-        return DATA_TABLE_ROW_COLOR;
-      },
-      hLineWidth: function (i, node) {
-        return i === 1 ? 2 : 0;
-      },
-      vLineWidth: function (i, node) {
-        return 2;
-      },
-      hLineColor: function (i, node) {
-        return DATA_TABLE_BORDER_COLOR;
-      },
-      vLineColor: function (i, node) {
-        return DATA_TABLE_BORDER_COLOR;
-      },
-    },
-    margin: TABLE_MARGINS,
-    table: {
-      headerRows: 1,
-      body: [
-        [createTableHeaderText("Comment")],
-        [createTableBodyText(commentText)],
-      ],
-    },
-  };
+  const body = [
+    [tableHelper.createTableHeaderText("Comment")],
+    [tableHelper.createTableRowText(commentText)],
+  ];
+  return tableHelper.baseDataTable({ body });
 }
 
 /**
@@ -419,74 +361,54 @@ function createCommentBlock(commentText) {
  * @returns table definition object
  */
 function createThrowTable(tableData = []) {
-  const tableDataComponents = [];
-  if (tableData.length === 0) {
-    return { text: "No data for throw table" };
-  } else {
-    for (const row of tableData) {
-      const newRow = row.map((column) => {
-        return createTableBodyText(column, "center");
-      });
-      tableDataComponents.push(newRow);
-    }
-  }
-  return {
-    layout: {
-      fillColor: function (rowIndex, node, columnIndex) {
-        if (rowIndex < 2) return DATA_TABLE_HEADER_COLOR;
-        return DATA_TABLE_ROW_COLOR;
-      },
-      hLineWidth: function (i, node) {
-        return i === 1 ? 2 : 0;
-      },
-      vLineWidth: function (i, node) {
-        return 2;
-      },
-      hLineColor: function (i, node) {
-        return DATA_TABLE_BORDER_COLOR;
-      },
-      vLineColor: function (i, node) {
-        return DATA_TABLE_BORDER_COLOR;
-      },
-    },
-    margin: TABLE_MARGINS,
-    table: {
-      headerRows: 2,
-      body: [
-        [
-          {
-            ...createTableHeaderText("", "center"),
-            colSpan: 6,
-          },
-          {},
-          {},
-          {},
-          {},
-          {},
-          {
-            ...createTableHeaderText("System estimated", "center"),
-            colSpan: 4,
-          },
-          {},
-          {},
-          {},
-        ],
-        [
-          createTableHeaderText("Cage [nr]", "center"),
-          createTableHeaderText("Throw [nr]", "center"),
-          createTableHeaderText("Tool type", "center"),
-          createTableHeaderText("Start [HH:MM]", "center"),
-          createTableHeaderText("Stop [HH:MM]", "center"),
-          createTableHeaderText("Time", "center"),
-          createTableHeaderText("Pump speed [rpm]", "center"),
-          createTableHeaderText("Biomass [kg]", "center"),
-          createTableHeaderText("Quantu m [fish]", "center"),
-          createTableHeaderText("Efficiency [fish/min]", "center"),
-        ],
-        ...tableDataComponents,
+  const header = (text) =>
+    tableHelper.createTableHeaderText(text, { alignment: "center" });
+
+  const transformer = (column) =>
+    tableHelper.createTableRowText(column, { alignment: "center" });
+
+  const tableDataComponents = tableHelper.transformTableRowText(
+    tableData,
+    transformer
+  );
+
+  const table = {
+    headerRows: 2,
+    body: [
+      [
+        {
+          ...header(""),
+          colSpan: 6,
+        },
+        {},
+        {},
+        {},
+        {},
+        {},
+        {
+          ...header("System estimated"),
+          colSpan: 4,
+        },
+        {},
+        {},
+        {},
       ],
-    },
+      [
+        header("Cage [nr]"),
+        header("Throw [nr]"),
+        header("Tool type"),
+        header("Start [HH:MM]"),
+        header("Stop [HH:MM]"),
+        header("Time [HH:MM]"),
+        header("Pump Speed [rpm]"),
+        header("Biomass [kg]"),
+        header("Quantum [fish]"),
+        header("Efficiency [fish/min]"),
+      ],
+      ...tableDataComponents,
+    ],
   };
+  return tableHelper.baseDataTable(table);
 }
 
 /**
@@ -495,68 +417,47 @@ function createThrowTable(tableData = []) {
  * @returns table definition object
  */
 function createCageTable(tableData = []) {
-  const tableDataComponents = [];
-  if (tableData.length === 0) {
-    return { text: "No data for cage table" };
-  } else {
-    for (const row of tableData) {
-      const newRow = row.map((column) => {
-        return createTableBodyText(column, "center");
-      });
-      tableDataComponents.push(newRow);
-    }
-  }
-  return {
-    layout: {
-      fillColor: function (rowIndex, node, columnIndex) {
-        if (rowIndex < 2) return DATA_TABLE_HEADER_COLOR;
-        return DATA_TABLE_ROW_COLOR;
-      },
-      hLineWidth: function (i, node) {
-        return i === 1 ? 2 : 0;
-      },
-      vLineWidth: function (i, node) {
-        return 2;
-      },
-      hLineColor: function (i, node) {
-        return DATA_TABLE_BORDER_COLOR;
-      },
-      vLineColor: function (i, node) {
-        return DATA_TABLE_BORDER_COLOR;
-      },
-    },
-    margin: TABLE_MARGINS,
-    table: {
-      headerRows: 2,
-      body: [
-        [
-          {
-            ...createTableHeaderText("", "center"),
-            colSpan: 4,
-          },
-          {},
-          {},
-          {},
-          {
-            ...createTableHeaderText("System estimated", "center"),
-            colSpan: 3,
-          },
-          {},
-          {},
-        ],
-        [
-          createTableHeaderText("From cage [nr]", "center"),
-          createTableHeaderText("To RSW Tank [nr]", "center"),
-          createTableHeaderText("Total Time [HH:MM:SS]", "center"),
-          createTableHeaderText("Waiting [HH:MM:SS]", "center"),
-          createTableHeaderText("Biomass [kg]", "center"),
-          createTableHeaderText("Quantum [fish]", "center"),
-          createTableHeaderText("Avg. Biomass [kg/fisk]", "center"),
-        ],
-        ...tableDataComponents,
+  const header = (text) =>
+    tableHelper.createTableHeaderText(text, { alignment: "center" });
+
+  const transformer = (column) =>
+    tableHelper.createTableRowText(column, { alignment: "center" });
+
+  const tableDataComponents = tableHelper.transformTableRowText(
+    tableData,
+    transformer
+  );
+
+  const table = {
+    body: [
+      [
+        {
+          ...header(""),
+          colSpan: 4,
+        },
+        {},
+        {},
+        {},
+        {
+          ...header("System estimated"),
+          colSpan: 3,
+        },
+        {},
+        {},
       ],
-    },
+      [
+        header("From cage [nr]"),
+        header("To RSW Tank [nr]"),
+        header("Total Time [HH:MM:SS]"),
+        header("Waiting [HH:MM:SS]"),
+        header("Biomass [kg]"),
+        header("Quantum [fish]"),
+        header("Avg. Biomass [kg/fisk]"),
+      ],
+      ...tableDataComponents,
+    ],
   };
+  return tableHelper.baseDataTable(table);
 }
 
 /**
@@ -565,50 +466,28 @@ function createCageTable(tableData = []) {
  * @returns table definition object
  */
 function createCageCommentTable(tableData = []) {
-  const tableDataComponents = [];
-  if (tableData.length === 0) {
-    return { text: "No data for cage comment table" };
-  } else {
-    for (const row of tableData) {
-      const newRow = row.map((column, index) => {
-        if (index === 0) return createTableBodyText(column, "center");
-        return createTableBodyText(column);
-      });
-      tableDataComponents.push(newRow);
+  const transformer = (column, index) => {
+    if (index === 0) {
+      return tableHelper.createTableRowText(column, { alignment: "center" });
     }
-  }
-  return {
-    layout: {
-      fillColor: function (rowIndex, node, columnIndex) {
-        if (rowIndex < 1) return DATA_TABLE_HEADER_COLOR;
-        return DATA_TABLE_ROW_COLOR;
-      },
-      hLineWidth: function (i, node) {
-        return i === 1 ? 2 : 0;
-      },
-      vLineWidth: function (i, node) {
-        return 2;
-      },
-      hLineColor: function (i, node) {
-        return DATA_TABLE_BORDER_COLOR;
-      },
-      vLineColor: function (i, node) {
-        return DATA_TABLE_BORDER_COLOR;
-      },
-    },
-    margin: TABLE_MARGINS,
-    table: {
-      headerRows: 1,
-      widths: ["auto", "*"],
-      body: [
-        [
-          createTableHeaderText("Cage[nr]", "center"),
-          createTableHeaderText("Comment"),
-        ],
-        ...tableDataComponents,
-      ],
-    },
+    return tableHelper.createTableRowText(column);
   };
+
+  const tableDataComponents = tableHelper.transformTableRowText(
+    tableData,
+    transformer
+  );
+  const table = {
+    widths: ["auto", "*"],
+    body: [
+      [
+        tableHelper.createTableHeaderText("Cage[nr]", { alignment: "center" }),
+        tableHelper.createTableHeaderText("Comment"),
+      ],
+      ...tableDataComponents,
+    ],
+  };
+  return tableHelper.baseDataTable(table, 1);
 }
 
 /**
@@ -617,49 +496,36 @@ function createCageCommentTable(tableData = []) {
  * @returns table definition object
  */
 function createProcessNotesTable(tableData = []) {
-  const tableDataComponents = [];
-  if (tableData.length === 0) {
-    return { text: "No data for process notes table" };
-  } else {
-    for (const row of tableData) {
-      const newRow = row.map((column, index) => {
-        if (index < 2) return createTableBodyText(column, "center");
-        return createTableBodyText(column);
-      });
-      tableDataComponents.push(newRow);
-    }
-  }
-  return {
-    layout: {
-      fillColor: function (rowIndex, node, columnIndex) {
-        if (rowIndex < 1) return DATA_TABLE_HEADER_COLOR;
-        return DATA_TABLE_ROW_COLOR;
-      },
-      hLineWidth: function (i, node) {
-        return i === 1 ? 2 : 0;
-      },
-      vLineWidth: function (i, node) {
-        return 2;
-      },
-      hLineColor: function (i, node) {
-        return DATA_TABLE_BORDER_COLOR;
-      },
-      vLineColor: function (i, node) {
-        return DATA_TABLE_BORDER_COLOR;
-      },
-    },
-    margin: TABLE_MARGINS,
-    table: {
-      headerRows: 1,
-      widths: ["auto", "auto", "*"],
-      body: [
-        [
-          createTableHeaderText("Work", "center"),
-          createTableHeaderText("Data & Time", "center"),
-          createTableHeaderText("Comment"),
-        ],
-        ...tableDataComponents,
-      ],
-    },
+  const transformer = (column, index) => {
+    if (index < 2) return createTableBodyText(column, "center");
+    return createTableBodyText(column);
   };
+  const tableDataComponents = tableHelper.transformTableRowText(
+    tableData,
+    transformer
+  );
+  const table = {
+    widths: ["auto", "auto", "*"],
+    body: [
+      [
+        tableHelper.createTableHeaderText("Work", { alignment: "center" }),
+        tableHelper.createTableHeaderText("Data & Time", {
+          alignment: "center",
+        }),
+        tableHelper.createTableHeaderText("Comment"),
+      ],
+      ...tableDataComponents,
+    ],
+  };
+  return tableHelper.baseDataTable(table);
 }
+
+const table = {
+  createCageTable,
+  createThrowTable,
+  createProcessNotesTable,
+  createCageCommentTable,
+  createCommentBlock,
+};
+
+export { table, blocks, chapters, headers, utils };
