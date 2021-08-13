@@ -1,5 +1,5 @@
 import { tableHelper } from "./tableHelpers";
-const HISTOGRAM_HELPER_TABLE_HEADER_COLOR = "#309CAA";
+import profile from "../../profileConfig";
 
 const transformer = (column) => {
   return tableHelper.createTableRowText(column, { alignment: "center" });
@@ -26,7 +26,7 @@ export default function createGraphHelperTable(tableValues) {
   const headers = titles.map((title) => {
     return tableHelper.createTableHeaderText(title, {
       alignment: "center",
-      fill: HISTOGRAM_HELPER_TABLE_HEADER_COLOR,
+      fill: profile.HISTOGRAM_HELPER_TABLE_HEADER_COLOR,
     });
   });
   const table = {

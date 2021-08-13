@@ -1,25 +1,5 @@
 import { table, headers, chapters, blocks, utils } from "./components";
-
-const CHAPTER_LINE_HEIGHT = 5;
-const SUB_CHAPTER_LINE_HEIGHT = 3;
-const DATA_POINT_LINE_HEIGHT = 0.5;
-const SEPERATOR_LINE_COLOR = "#55D2E9";
-//
-const HISTOGRAM_HELPER_TABLE_HEADER_COLOR = "#309CAA";
-const HISTOGRAM_HELPER_TABLE_HEADER_TEXT_COLOR = "#FFFFFF";
-const HISTOGRAM_HELPER_TABLE_N1_ROW_COLOR = "#E9EBF5";
-const HISTOGRAM_HELPER_TABLE_N2_ROW_COLOR = "#CFD5EA";
-const HISTOGRAM_HELPER_TABLE_BORDER_COLOR = "#FFF";
-//
-const DATA_TABLE_HEADER_COLOR = "#7F7F7F";
-const DATA_TABLE_HEADER_TEXT_COLOR = "#FFFFFF";
-const DATA_TABLE_ROW_COLOR = "#F2F2F2";
-const DATA_TABLE_BORDER_COLOR = "#FFF";
-//
-const TITLE_MARGINS = [1, 15, 0, 3];
-const DATA_POINT_TEXT_MARGINS = [1, 3, 0, 3];
-const TABLE_MARGINS = [0, 15, 0, 0];
-const TABLE_TEXT_MARGINS = [0, 5, 2, 5];
+import profile, { pdfConfig } from "../profileConfig";
 
 var docDefinition = (data) => {
   console.dir(data);
@@ -37,36 +17,7 @@ var docDefinition = (data) => {
 
       return [];
     },
-    pageSize: "A4",
-    pageMargins: [20, 20, 20, 20],
-    styles: {
-      header: {
-        bold: true,
-        margin: TITLE_MARGINS,
-      },
-      subHeader: {
-        bold: false,
-        margin: TITLE_MARGINS,
-      },
-      dataPointHeader: {
-        bold: false,
-        margin: TITLE_MARGINS,
-      },
-      dataPointText: {
-        bold: false,
-        margin: DATA_POINT_TEXT_MARGINS,
-      },
-      tableHeader: {
-        bold: true,
-        color: DATA_TABLE_HEADER_TEXT_COLOR,
-        border: [true, true, true, true],
-        margin: TABLE_TEXT_MARGINS,
-      },
-      tableRow: {
-        border: [true, true, true, true],
-        margin: TABLE_TEXT_MARGINS,
-      },
-    },
+    ...pdfConfig,
     content: [
       { text: "-------- COMPONENTS" },
       blocks.createCheckboxesComponent([
@@ -74,20 +25,23 @@ var docDefinition = (data) => {
         { checked: false, label: "no" },
         { checked: true, label: "absolutely" },
       ]),
-      utils.createSeperatorLine(CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR),
       utils.createSeperatorLine(
-        SUB_CHAPTER_LINE_HEIGHT,
-        SEPERATOR_LINE_COLOR,
+        profile.CHAPTER_LINE_HEIGHT,
+        profile.SEPERATOR_LINE_COLOR
+      ),
+      utils.createSeperatorLine(
+        profile.SUB_CHAPTER_LINE_HEIGHT,
+        profile.SEPERATOR_LINE_COLOR,
         100
       ),
       utils.createSeperatorLine(
-        SUB_CHAPTER_LINE_HEIGHT,
-        SEPERATOR_LINE_COLOR,
+        profile.SUB_CHAPTER_LINE_HEIGHT,
+        profile.SEPERATOR_LINE_COLOR,
         50
       ),
       utils.createSeperatorLine(
-        DATA_POINT_LINE_HEIGHT,
-        SEPERATOR_LINE_COLOR,
+        profile.DATA_POINT_LINE_HEIGHT,
+        profile.SEPERATOR_LINE_COLOR,
         100
       ),
       chapters.createChapterSeperator("01-Main section"),

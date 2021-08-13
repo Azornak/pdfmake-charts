@@ -5,14 +5,12 @@ import createCageTable from "./tables/cageTable";
 import createThrowTable from "./tables/throwTable";
 import createGraphHelperTable from "./tables/graphHelperTable";
 import createCommentBlock from "./tables/commentBlock";
+import profile from "../profileConfig";
 
-const DOCUMENT_WIDTH = 555;
-const CHAPTER_LINE_HEIGHT = 5;
-const SUB_CHAPTER_LINE_HEIGHT = 3;
-const DATA_POINT_LINE_HEIGHT = 0.5;
-const SEPERATOR_LINE_COLOR = "#55D2E9";
-
-const checkbox = checkboxSVG("#003B4A", "#55D2E9");
+const checkbox = checkboxSVG(
+  profile.CHECKBOX_BACKGROUND_COLOR,
+  profile.CHECKBOX_CHECK_COLOR
+);
 
 /****************************
  * TEXT COMPONENTS
@@ -56,7 +54,7 @@ function breakPage() {
  */
 function createSeperatorLine(height, color, percentWidth = 100) {
   if (percentWidth > 100 || percentWidth < 1) percentWidth = 100;
-  const width = (percentWidth / 100) * DOCUMENT_WIDTH;
+  const width = (percentWidth / 100) * profile.DOCUMENT_WIDTH;
   return {
     svg: seperatorLineSVG(width, height, color),
   };
@@ -96,7 +94,11 @@ function createChapterDefinition(
 function createChapterSeperator(chapterTitle, width = 100) {
   return createChapterDefinition(
     createSectionHeader(chapterTitle),
-    createSeperatorLine(CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR, width)
+    createSeperatorLine(
+      profile.CHAPTER_LINE_HEIGHT,
+      profile.SEPERATOR_LINE_COLOR,
+      width
+    )
   );
 }
 
@@ -109,7 +111,11 @@ function createChapterSeperator(chapterTitle, width = 100) {
 function createSubChapterSeperator(subChapterTitle, width = 100) {
   return createChapterDefinition(
     createSubsectionHeader(subChapterTitle),
-    createSeperatorLine(SUB_CHAPTER_LINE_HEIGHT, SEPERATOR_LINE_COLOR, width)
+    createSeperatorLine(
+      profile.SUB_CHAPTER_LINE_HEIGHT,
+      profile.SEPERATOR_LINE_COLOR,
+      width
+    )
   );
 }
 
@@ -122,7 +128,11 @@ function createSubChapterSeperator(subChapterTitle, width = 100) {
 function createDataPointSeperator(dataPointTitle, width = 100) {
   return createChapterDefinition(
     createDataPointHeader(dataPointTitle),
-    createSeperatorLine(DATA_POINT_LINE_HEIGHT, SEPERATOR_LINE_COLOR, width)
+    createSeperatorLine(
+      profile.DATA_POINT_LINE_HEIGHT,
+      profile.SEPERATOR_LINE_COLOR,
+      width
+    )
   );
 }
 
@@ -147,7 +157,11 @@ function createDataPointComponent(dataPointConfig, width = 30) {
   return {
     stack: [
       createDataPointHeader(title),
-      createSeperatorLine(DATA_POINT_LINE_HEIGHT, SEPERATOR_LINE_COLOR, width),
+      createSeperatorLine(
+        profile.DATA_POINT_LINE_HEIGHT,
+        profile.SEPERATOR_LINE_COLOR,
+        width
+      ),
       component,
     ],
   };
@@ -191,7 +205,7 @@ function createHistogramTableComponents(graphConfig) {
       widths: ["65%", "*", "25%"],
       body: [
         [
-          { image: graph, width: DOCUMENT_WIDTH * 0.65 },
+          { image: graph, width: profile.DOCUMENT_WIDTH * 0.65 },
           {}, //empty block for filling space so table is pushed to right edge.
           createGraphHelperTable(table),
         ],
@@ -215,7 +229,7 @@ function createHistogramTableComponents(graphConfig) {
  */
 function createImageComponent(imageConfig) {
   const { image, title } = imageConfig;
-  const imageComponent = { image, width: DOCUMENT_WIDTH };
+  const imageComponent = { image, width: profile.DOCUMENT_WIDTH };
   return createDataPointComponent({ title, component: imageComponent }, 100);
 }
 
