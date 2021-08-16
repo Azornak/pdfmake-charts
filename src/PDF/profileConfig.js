@@ -7,6 +7,7 @@ const profileConfig = {
   DATA_POINT_LINE_HEIGHT: 0.5,
   DOCUMENT_WIDTH: 555, // FOR A4
   // colors
+  HEAD_FOOT_COLOR: optimarColorPalette.primaryLogo,
   SEPERATOR_LINE_COLOR: optimarColorPalette.secondaryBright,
   CHECKBOX_BACKGROUND_COLOR: optimarColorPalette.primaryDark,
   CHECKBOX_CHECK_COLOR: optimarColorPalette.primaryLight,
@@ -30,7 +31,7 @@ const profileConfig = {
 
 export const pdfConfig = {
   pageSize: "A4",
-  pageMargins: [20, 20, 20, 20],
+  pageMargins: [20, 70, 20, 60],
   styles: {
     header: {
       bold: true,
