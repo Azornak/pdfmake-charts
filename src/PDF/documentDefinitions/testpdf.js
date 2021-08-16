@@ -1,21 +1,16 @@
 import { table, headers, chapters, blocks, utils } from "./components";
 import profile, { pdfConfig } from "../profileConfig";
+import { footer } from "./components/footer";
+import { header } from "./components/header";
 
 var docDefinition = (data) => {
   console.dir(data);
   return {
     footer: function (currentPage, pageCount) {
-      const p = currentPage.toString() + " of " + pageCount;
-      const now = new Date();
-      return {
-        text: p + " - " + now.toDateString(),
-        alignment: "center",
-      };
+      return [footer];
     },
     header: function (currentPage, pageCount, pageSize) {
-      // you can apply any logic and return any valid pdfmake element
-
-      return [];
+      return [header];
     },
     ...pdfConfig,
     content: [
