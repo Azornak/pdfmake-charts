@@ -1,31 +1,46 @@
-import './App.css';
-import pdfGen from './PDF/pdfgenerator';
-import imgUrl from './images/lambda.png';
-
+import pdfGen from "./PDF/pdfgenerator";
+import "./App.css";
+import { getLineChart } from "./PDF/Charts/linechart";
+import {
+  lineChartDummyData,
+  lineChartDummyData2,
+} from "./PDF/Charts/lineChartDummyData";
+import { useEffect, useRef } from "react";
+import { getBarChart } from "./PDF/Charts/barchart";
+import { barChartDummyData } from "./PDF/Charts/barChartDummyData";
 function App() {
-  const downloadPDF = async (pdfType) => {
-    console.log("Download PDF clicked");
+  console.log("Download PDF clicked");
+  const iframeRef = useRef(null);
+  useEffect(() => {
+    const downloadPDF = async (pdfType) => {
+      const line1 = getLineChart(lineChartDummyData);
+      const line2 = getLineChart(lineChartDummyData2);
+      const bar1 = getBarChart(barChartDummyData);
 
-    // Code to load test image. When loading charts we generate the charts with chartjs and use canvas -> toDataURI to get the image
-    // This should be separated into own file, e.g. calling getLinechart(data)
-    let blob = await fetch(imgUrl).then(res =>  res.blob());
-    console.log(blob);
-    let dataUrl = await new Promise(resolve => {
-      let reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.readAsDataURL(blob);
-    });
-    const data = {
-      heading: ["test1", "test2", "test3", "test4"],
-      imageTest: dataUrl,
-      chartData: [{x: 'label', y: 123}, {x: 'label', y: 123}, {x: 'label', y: 123}, {x: 'label', y: 123}]
+      const pdfData = {
+        heading: ["test1", "test3", "test3", "test4"],
+        barChart1: bar1.toBase64Image(),
+        lineChart1: line1.toBase64Image(),
+        lineChart2: line2.toBase64Image(),
+        chartData: [
+          { x: "label", y: 123 },
+          { x: "label", y: 123 },
+          { x: "label", y: 123 },
+          { x: "label", y: 123 },
+        ],
+      };
+      pdfGen(pdfType, iframeRef.current, pdfData);
     };
-    pdfGen(pdfType, data);
-  }
+    downloadPDF();
+  }, []);
 
   return (
     <div className="App">
-      <button onClick={() => downloadPDF('testpdf')} >Download PDF</button>
+      <iframe
+        title="pdf"
+        ref={iframeRef}
+        style={{ width: "100vw", height: "100vh" }}
+      />
     </div>
   );
 }
